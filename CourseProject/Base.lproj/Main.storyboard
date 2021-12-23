@@ -22,55 +22,55 @@
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="3X1-2z-Iyh">
-                                <rect key="frame" x="142" y="111" width="131" height="32"/>
+                                <rect key="frame" x="144.5" y="111" width="125" height="32"/>
                                 <segments>
                                     <segment title="Movies"/>
                                     <segment title="Series"/>
                                 </segments>
                             </segmentedControl>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5cD-bo-byv">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SKW-IB-bdW">
                                 <rect key="frame" x="0.0" y="150" width="414" height="663"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jBW-Pc-5LI">
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9PX-Yg-Xcp">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="noh-fG-LNZ">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="8OG-mu-D7t">
                                         <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Mpj-eg-4DX">
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="pAB-uj-Pnn">
                                             <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="pJ8-mY-uWO"/>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="1b8-cj-LnW"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="fCC-Ax-oHt"/>
                                 </connections>
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="5cD-bo-byv" secondAttribute="trailing" id="AAL-BS-7yx"/>
-                            <constraint firstItem="3X1-2z-Iyh" firstAttribute="top" secondItem="dzw-E3-i2e" secondAttribute="bottom" constant="8" id="I50-hJ-vVA"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="3X1-2z-Iyh" secondAttribute="trailing" constant="141" id="S7d-lj-hrF"/>
+                            <constraint firstItem="SKW-IB-bdW" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="PbC-KK-Q7e"/>
                             <constraint firstAttribute="trailing" secondItem="dzw-E3-i2e" secondAttribute="trailing" id="aE9-KV-FlC"/>
-                            <constraint firstItem="5cD-bo-byv" firstAttribute="top" secondItem="3X1-2z-Iyh" secondAttribute="bottom" constant="8" id="cSn-4M-2Oh"/>
+                            <constraint firstItem="3X1-2z-Iyh" firstAttribute="top" secondItem="dzw-E3-i2e" secondAttribute="bottom" constant="8" id="bsc-jP-kgr"/>
                             <constraint firstItem="dzw-E3-i2e" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="f7f-qK-GnD"/>
                             <constraint firstItem="dzw-E3-i2e" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="jbT-vF-FGh"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="5cD-bo-byv" secondAttribute="bottom" id="n1G-EF-iQp"/>
-                            <constraint firstItem="5cD-bo-byv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="zUD-9p-Qqc"/>
-                            <constraint firstItem="3X1-2z-Iyh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="142" id="zno-xH-VMO"/>
+                            <constraint firstItem="3X1-2z-Iyh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="p29-W9-fkN"/>
+                            <constraint firstItem="SKW-IB-bdW" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="qaX-xo-wtC"/>
+                            <constraint firstItem="SKW-IB-bdW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="t1l-7Z-hpI"/>
+                            <constraint firstItem="SKW-IB-bdW" firstAttribute="top" secondItem="3X1-2z-Iyh" secondAttribute="bottom" constant="8" id="xHt-Ci-MB4"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Trending" image="folder.fill" catalog="system" landscapeImage="folder.fill" id="VA3-GU-eQ5"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="TrendingCollectionView" destination="5cD-bo-byv" id="7GN-FT-Vjh"/>
+                        <outlet property="TrendingCollectionView" destination="SKW-IB-bdW" id="dYo-zB-ol2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -148,6 +148,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="S88-oW-7Gp" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="WiD-ed-iR8">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>

@@ -4,5 +4,6 @@ target 'CourseProject' do
   pod 'Alamofire'
   pod 'SDWebImage'
   pod 'RealmSwift'
+  pod 'lottie-ios'
 
 end

@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.5.0)
+  - lottie-ios (3.3.0)
   - Realm (10.20.1):
     - Realm/Headers (= 10.20.1)
   - Realm/Headers (10.20.1)
@@ -11,22 +12,25 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - lottie-ios
   - RealmSwift
   - SDWebImage
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - lottie-ios
     - Realm
     - RealmSwift
     - SDWebImage
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
   Realm: fac5ecd031fcb81171627b74944c885662d4b266
   RealmSwift: 9b02d25acb46a14756bde9893abb99e2e3675923
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: 320c0610b98630405fd943d485634e062dd792ee
+PODFILE CHECKSUM: e2187146856545c7e6799b07ebe636e9f9e111c2
 
 COCOAPODS: 1.11.2
