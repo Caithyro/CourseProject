@@ -9,23 +9,23 @@ import UIKit
 import SDWebImage
 
 class TrendingCollectionViewCell: UICollectionViewCell {
-
+    
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var originalLanguageLabel: UILabel!
+    @IBOutlet weak var totalVotesLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
     }
     
     func configureCell(dataToDisplay: ResultsToSave) {
         
         let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
-        let imageView: UIImageView
         
         self.titleLabel.text = dataToDisplay.title
         self.posterImageView.layer.cornerRadius = 15
@@ -41,6 +41,8 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         } else {
             originalLanguageLabel.text = dataToDisplay.originalLanguage
         }
+        self.totalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
+        self.mainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
     }
-    
 }
+

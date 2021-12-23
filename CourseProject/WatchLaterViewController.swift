@@ -16,7 +16,7 @@ class WatchLaterViewController: UIViewController {
         
         watchLaterCollectionView.register(UINib(nibName: "WatchLaterCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "WatchLaterCollectionViewCell")
     }
-
+    
 }
 
 extension WatchLaterViewController: UICollectionViewDataSource {
