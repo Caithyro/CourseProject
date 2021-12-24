@@ -10,27 +10,35 @@ import Alamofire
 
 class TrendingViewController: UIViewController {
     
+    static let shared = TrendingViewController()
+    
     @IBOutlet weak var TrendingCollectionView: UICollectionView!
     @IBOutlet weak var trendingSegmentedControl: UISegmentedControl!
     
-    private let refreshControl = UIRefreshControl()
-    var savedMoviesArray : [ResultsToSave] = []
-    var savedSeriesArray : [ResultsToSave] = []
-    let requestUrl = "https://api.themoviedb.org/3/trending/all/day?api_key=0b7fec5fcf33f299afcdde35a5fa4843"
-    var responceDataArray: [Results] = []
+    var savedMoviesArray : [MoviesResultsToSave] = []
+    var savedSeriesArray : [TvResultsToSave] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.trendingSegmentedControl.selectedSegmentIndex = 0
-        self.trendingSegmentedControlSetUp(forIndex: trendingSegmentedControl.selectedSegmentIndex)
+        RequestManager.shared.trendingViewControllerInstance = self
+        DetailsViewController.shared.trendingViewControllerInstance = self
+        
+        trendingSegmentedControl.selectedSegmentIndex = 0
+        
+        if trendingSegmentedControl.selectedSegmentIndex == 0 {
+            RequestManager.shared.requestMovies()
+            self.savedMoviesArray = DataManager.shared.getMovies()
+            RequestManager.shared.requestTvShows()
+            self.savedSeriesArray = DataManager.shared.getSeries()
+            self.TrendingCollectionView.reloadData()
+        }
         
         self.TrendingCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.TrendingCollectionView.register(UINib(nibName: "TrendingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "TrendingCollectionViewCell")
         
         self.title = "Trending for today"
         
-        performRequest()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,66 +46,19 @@ class TrendingViewController: UIViewController {
         
         self.tabBarController?.tabBar.layer.isHidden = false
         self.navigationController?.navigationBar.isHidden = false
-    }
-    
-    func performRequest() {
-        
-        AF.request(requestUrl, method: .get).responseJSON { responceData1 in
-            
-            do {
-                
-                var indexForAppend = 0
-                let jsonDecoder = JSONDecoder()
-                let responseModel = try jsonDecoder.decode(ResultsModel.self, from: responceData1.data!)
-                for _ in responseModel.results! {
-                    self.responceDataArray.append(responseModel.results![indexForAppend])
-                    indexForAppend += 1
-                }
-                
-                DataManager().clearRealm()
-                indexForAppend = 0
-                
-                for _ in self.responceDataArray {
-                    DataManager().saveItems(genreIds: self.responceDataArray[indexForAppend].genreIds ?? [], originalLanguage: self.responceDataArray[indexForAppend].originalLanguage ?? "",
-                                            originalTitle: self.responceDataArray[indexForAppend].originalTitle ?? self.responceDataArray[indexForAppend].originalName ?? "",
-                                            originalName: self.responceDataArray[indexForAppend].originalName ?? "",
-                                            posterPath: self.responceDataArray[indexForAppend].posterPath ?? "",
-                                            video: self.responceDataArray[indexForAppend].video ?? false,
-                                            voteAverage: self.responceDataArray[indexForAppend].voteAverage ?? 0.0,
-                                            voteCount: self.responceDataArray[indexForAppend].voteCount ?? 0,
-                                            overview: self.responceDataArray[indexForAppend].overview ?? "",
-                                            releaseDate: self.responceDataArray[indexForAppend].releaseDate ?? self.responceDataArray[indexForAppend].firstAirDate ?? "",
-                                            firstAirDate: self.responceDataArray[indexForAppend].firstAirDate ?? "",
-                                            title: self.responceDataArray[indexForAppend].title ?? self.responceDataArray[indexForAppend].name ?? "",
-                                            name: self.responceDataArray[indexForAppend].name ?? "",
-                                            id: self.responceDataArray[indexForAppend].id ?? 0,
-                                            adult: self.responceDataArray[indexForAppend].adult ?? true,
-                                            backdropPath: self.responceDataArray[indexForAppend].backdropPath ?? "",
-                                            popularity: self.responceDataArray[indexForAppend].popularity ?? 0.0,
-                                            mediaType: self.responceDataArray[indexForAppend].mediaType ?? "")
-                    indexForAppend += 1
-                }
-                self.trendingSegmentedControlSetUp(forIndex: self.trendingSegmentedControl.selectedSegmentIndex)
-                indexForAppend = 0
-            } catch {
-                print(error)
-                self.trendingSegmentedControlSetUp(forIndex: self.trendingSegmentedControl.selectedSegmentIndex)
-            }
-        }
-    }
-    
-    func trendingSegmentedControlSetUp(forIndex: Int) {
-        if forIndex == 0 {
-            self.savedMoviesArray = DataManager().getMovies()
-            self.TrendingCollectionView.reloadData()
-        } else {
-            self.savedSeriesArray = DataManager().getSeries()
-            self.TrendingCollectionView.reloadData()
-        }
+
     }
     
     @IBAction func trendingSegmentedControlSwitched(_ sender: Any) {
-        trendingSegmentedControlSetUp(forIndex: trendingSegmentedControl.selectedSegmentIndex)
+        if trendingSegmentedControl.selectedSegmentIndex == 0 {
+            self.savedMoviesArray = DataManager.shared.getMovies()
+            self.TrendingCollectionView.reloadData()
+            DetailsViewController.shared.movieOrTvShow = 0
+        } else {
+            self.savedSeriesArray = DataManager.shared.getSeries()
+            self.TrendingCollectionView.reloadData()
+            DetailsViewController.shared.movieOrTvShow = 1
+        }
     }
 }
 
@@ -118,15 +79,16 @@ extension TrendingViewController: UICollectionViewDataSource {
         
         guard let trendingCell = TrendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
         
-        var dataToDisplay = ResultsToSave()
+        var movieDataToDisplay = MoviesResultsToSave()
+        var tvDataToDisplay = TvResultsToSave()
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            dataToDisplay = savedMoviesArray[indexPath.row]
+            movieDataToDisplay = savedMoviesArray[indexPath.row]
+            trendingCell.configureMoviesCell(dataToDisplay: movieDataToDisplay)
         } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
-            dataToDisplay = savedSeriesArray[indexPath.row]
+            tvDataToDisplay = savedSeriesArray[indexPath.row]
+            trendingCell.configureSeriesCell(dataToDisplay: tvDataToDisplay)
         }
-        
-        trendingCell.configureCell(dataToDisplay: dataToDisplay)
         
         return trendingCell
     }
@@ -135,27 +97,44 @@ extension TrendingViewController: UICollectionViewDataSource {
 }
 
 extension TrendingViewController: UICollectionViewDelegate {
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        var dataToDisplay1 = ResultsToSave()
-        if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            dataToDisplay1 = savedMoviesArray[indexPath.row]
-        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
-            dataToDisplay1 = savedSeriesArray[indexPath.row]
-        }
+        var movieDataToDisplay = MoviesResultsToSave()
+        var tvDataToDisplay = TvResultsToSave()
         
-        let main = UIStoryboard(name: "Main", bundle: nil)
-        if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
-            navigationController?.pushViewController(detailsViewController, animated: true)
-            detailsViewController.backgroundImageViewURL = dataToDisplay1.posterPath
-            detailsViewController.detailsTitle = dataToDisplay1.title
-            detailsViewController.detailsPosterURL = dataToDisplay1.posterPath
-            detailsViewController.detailsDescription = dataToDisplay1.overview
-            detailsViewController.detailsAverageVote = dataToDisplay1.voteAverage
-            detailsViewController.detailsVoteCount = dataToDisplay1.voteCount
-            detailsViewController.detailsGenres = dataToDisplay1.genreIds
-            detailsViewController.detailsOriginalLanguage = dataToDisplay1.originalLanguage
+        if trendingSegmentedControl.selectedSegmentIndex == 0 {
+            movieDataToDisplay = savedMoviesArray[indexPath.row]
+            let main = UIStoryboard(name: "Main", bundle: nil)
+            if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                navigationController?.pushViewController(detailsViewController, animated: true)
+                RequestManager.shared.requestMovieCast(targetMovieId: movieDataToDisplay.id)
+                detailsViewController.backgroundImageViewURL = movieDataToDisplay.posterPath
+                detailsViewController.detailsTitle = movieDataToDisplay.title
+                detailsViewController.detailsPosterURL = movieDataToDisplay.posterPath
+                detailsViewController.detailsDescription = movieDataToDisplay.overview
+                detailsViewController.detailsAverageVote = movieDataToDisplay.voteAverage
+                detailsViewController.detailsVoteCount = movieDataToDisplay.voteCount
+                detailsViewController.detailsOriginalLanguage = movieDataToDisplay.originalLanguage
+                detailsViewController.targetMovie = movieDataToDisplay.id
+                detailsViewController.movieOrTvShow = 0
+            }
+        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+            tvDataToDisplay = savedSeriesArray[indexPath.row]
+            let main = UIStoryboard(name: "Main", bundle: nil)
+            if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                navigationController?.pushViewController(detailsViewController, animated: true)
+                RequestManager.shared.requestTvCast(targetShowId: tvDataToDisplay.id)
+                detailsViewController.backgroundImageViewURL = tvDataToDisplay.posterPath
+                detailsViewController.detailsTitle = tvDataToDisplay.name
+                detailsViewController.detailsPosterURL = tvDataToDisplay.posterPath
+                detailsViewController.detailsDescription = tvDataToDisplay.overview
+                detailsViewController.detailsAverageVote = tvDataToDisplay.voteAverage
+                detailsViewController.detailsVoteCount = tvDataToDisplay.voteCount
+                detailsViewController.detailsOriginalLanguage = tvDataToDisplay.originalLanguage
+                detailsViewController.targetTvShow = tvDataToDisplay.id
+                detailsViewController.movieOrTvShow = 1
+            }
         }
     }
 }

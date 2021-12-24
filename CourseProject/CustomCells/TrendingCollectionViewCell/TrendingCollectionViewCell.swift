@@ -23,7 +23,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func configureCell(dataToDisplay: ResultsToSave) {
+    func configureMoviesCell(dataToDisplay: MoviesResultsToSave) {
         
         let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
         
@@ -32,6 +32,27 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: nil, context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.releaseDateLabel.text = "Release: \(dataToDisplay.releaseDate)"
+        if dataToDisplay.originalLanguage == "en" {
+            originalLanguageLabel.text = "Original language: English"
+        } else if dataToDisplay.originalLanguage == "es" {
+            originalLanguageLabel.text = "Original language: Spanish"
+        } else if dataToDisplay.originalLanguage == "ru" {
+            originalLanguageLabel.text = "Original language: Russian"
+        } else {
+            originalLanguageLabel.text = dataToDisplay.originalLanguage
+        }
+        self.totalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
+        self.mainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
+    }
+    
+    func configureSeriesCell(dataToDisplay: TvResultsToSave) {
+        let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
+        
+        self.titleLabel.text = dataToDisplay.name
+        self.posterImageView.layer.cornerRadius = 15
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: nil, context: [.imageTransformer: transformer])
+        self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
+        self.releaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate)"
         if dataToDisplay.originalLanguage == "en" {
             originalLanguageLabel.text = "Original language: English"
         } else if dataToDisplay.originalLanguage == "es" {

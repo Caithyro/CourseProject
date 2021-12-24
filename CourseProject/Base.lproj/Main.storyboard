@@ -38,7 +38,7 @@
                                     <action selector="trendingSegmentedControlSwitched:" destination="BYZ-38-t0r" eventType="valueChanged" id="ovg-55-uSj"/>
                                 </connections>
                             </segmentedControl>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SKW-IB-bdW">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SKW-IB-bdW">
                                 <rect key="frame" x="0.0" y="194" width="414" height="619"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9PX-Yg-Xcp">
@@ -162,6 +162,8 @@
                                                 </cells>
                                                 <connections>
                                                     <outlet property="dataSource" destination="AfK-mb-BAf" id="vFg-vz-lYV"/>
+                                                    <outlet property="delegate" destination="AfK-mb-BAf" id="CaV-t2-tlt"/>
+                                                    <outlet property="prefetchDataSource" destination="AfK-mb-BAf" id="Zzg-Sa-86x"/>
                                                 </connections>
                                             </collectionView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VoteAVG in VoteCount" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgF-Tk-o5o">
