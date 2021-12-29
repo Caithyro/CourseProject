@@ -49,7 +49,6 @@ class TrendingViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.tabBarController?.tabBar.layer.isHidden = false
         self.navigationController?.navigationBar.isHidden = false
     }
