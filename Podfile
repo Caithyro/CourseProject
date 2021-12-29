@@ -4,5 +4,7 @@ target 'CourseProject' do
   pod 'Alamofire'
   pod 'SDWebImage'
   pod 'RealmSwift'
+  pod 'lottie-ios'
+  pod 'youtube-ios-player-helper'
 
 end
