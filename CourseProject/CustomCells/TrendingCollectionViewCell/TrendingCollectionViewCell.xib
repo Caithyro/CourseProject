@@ -61,10 +61,23 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vav-28-uxP">
+                                <rect key="frame" x="121" y="0.0" width="65" height="65"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="65" id="hfg-R1-okv"/>
+                                    <constraint firstAttribute="height" constant="65" id="wEx-zh-HQ2"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="saveButton"/>
+                                <connections>
+                                    <action selector="saveToWatchLaterButtonPressed:" destination="gTV-IL-0wX" eventType="touchUpInside" id="Fae-lS-ecE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="mg4-uo-Dy7" firstAttribute="top" secondItem="ff3-CK-XS5" secondAttribute="bottom" constant="8" symbolic="YES" id="1Sy-Zr-Phc"/>
+                            <constraint firstAttribute="trailing" secondItem="vav-28-uxP" secondAttribute="trailing" id="2SE-Eh-auh"/>
                             <constraint firstAttribute="trailing" secondItem="Fiu-4Z-K3C" secondAttribute="trailing" constant="8" id="7WD-7C-fDe"/>
                             <constraint firstItem="zET-eS-l2Y" firstAttribute="leading" secondItem="FPh-vf-GUK" secondAttribute="leading" constant="8" id="Ihl-rd-NI2"/>
                             <constraint firstItem="vq7-3o-LPz" firstAttribute="leading" secondItem="FPh-vf-GUK" secondAttribute="leading" constant="8" id="J4Q-ze-yPj"/>
@@ -74,6 +87,7 @@
                             <constraint firstItem="Z5C-q5-ik8" firstAttribute="top" secondItem="Fiu-4Z-K3C" secondAttribute="bottom" constant="8" symbolic="YES" id="csI-L5-Rc7"/>
                             <constraint firstItem="Fiu-4Z-K3C" firstAttribute="top" secondItem="ff3-CK-XS5" secondAttribute="bottom" constant="8" symbolic="YES" id="eFt-Hq-V0L"/>
                             <constraint firstAttribute="trailing" secondItem="ff3-CK-XS5" secondAttribute="trailing" constant="8" id="ex6-oe-Uwq"/>
+                            <constraint firstItem="vav-28-uxP" firstAttribute="top" secondItem="FPh-vf-GUK" secondAttribute="top" id="fEt-nt-sng"/>
                             <constraint firstItem="vq7-3o-LPz" firstAttribute="top" secondItem="mg4-uo-Dy7" secondAttribute="bottom" constant="8" symbolic="YES" id="oVq-6J-hYj"/>
                             <constraint firstAttribute="trailing" secondItem="Z5C-q5-ik8" secondAttribute="trailing" constant="8" id="oaE-rc-2yg"/>
                             <constraint firstItem="mg4-uo-Dy7" firstAttribute="leading" secondItem="FPh-vf-GUK" secondAttribute="leading" constant="8" id="qTc-Pf-aqS"/>
@@ -98,6 +112,7 @@
                 <outlet property="posterImageView" destination="zET-eS-l2Y" id="A9s-xL-tBK"/>
                 <outlet property="ratingLabel" destination="mg4-uo-Dy7" id="Iwy-kA-Cvx"/>
                 <outlet property="releaseDateLabel" destination="Fiu-4Z-K3C" id="Kht-Kg-1Ch"/>
+                <outlet property="saveButton" destination="vav-28-uxP" id="wWq-it-Bg4"/>
                 <outlet property="titleLabel" destination="ff3-CK-XS5" id="APQ-Ct-Hv4"/>
                 <outlet property="totalVotesLabel" destination="vq7-3o-LPz" id="GtZ-Gd-aA9"/>
             </connections>
@@ -105,6 +120,7 @@
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="saveButton" width="80" height="80"/>
         <systemColor name="secondarySystemFillColor">
             <color red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.16" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

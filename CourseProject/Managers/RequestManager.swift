@@ -19,13 +19,15 @@ class RequestManager {
     var tvShowsResponceData: [TvResults] = []
     var movieCastResponceData: [MovieCastResults] = []
     var tvCastResponceData: [TvCastResults] = []
+    var movieTrailersResponceData: [MovieTrailersRelults] = []
+    var tvTrailersResponceData: [TvTrailersRelults] = []
     var movieId = ""
     let movieRequestUrl = "https://api.themoviedb.org/3/trending/movie/day?api_key=0b7fec5fcf33f299afcdde35a5fa4843"
     let tvRequestUrl = "https://api.themoviedb.org/3/trending/tv/day?api_key=0b7fec5fcf33f299afcdde35a5fa4843"
     
     func requestMovies() {
         
-        AF.request(movieRequestUrl, method: .get).responseJSON { [self]moviesResponceData1 in
+        AF.request(movieRequestUrl).responseJSON { [self]moviesResponceData1 in
             
             do {
                 
@@ -39,25 +41,25 @@ class RequestManager {
                 
                 indexForAppend = 0
                 
-                if DataManager.shared.moviesRealm.isEmpty == false {
-                    DataManager.shared.clearMoviesRealm()
-                }
+//                if DataManager.shared.moviesRealm.isEmpty == false {
+//                    DataManager.shared.clearMoviesRealm()
+//                }
                 
                 for _ in self.moviesResponceData {
                     DataManager.shared.saveMovies(id: self.moviesResponceData[indexForAppend].id ?? 0,
-                                             releaseDate: self.moviesResponceData[indexForAppend].releaseDate ?? "",
-                                             adult: self.moviesResponceData[indexForAppend].adult ?? false,
-                                             backdropPath: self.moviesResponceData[indexForAppend].backdropPath ?? "",
-                                             voteCount: self.moviesResponceData[indexForAppend].voteCount ?? 0,
-                                             overview: self.moviesResponceData[indexForAppend].overview ?? "",
-                                             originalLanguage: self.moviesResponceData[indexForAppend].originalLanguage ?? "",
-                                             originalTitle: self.moviesResponceData[indexForAppend].originalTitle ?? "",
-                                             posterPath: self.moviesResponceData[indexForAppend].posterPath ?? "",
-                                             title: self.moviesResponceData[indexForAppend].title ?? "",
-                                             video: self.moviesResponceData[indexForAppend].video ?? false,
-                                             voteAverage: self.moviesResponceData[indexForAppend].voteAverage ?? 0.0,
-                                             popularity: self.moviesResponceData[indexForAppend].popularity ?? 0.0,
-                                             mediaType: self.moviesResponceData[indexForAppend].mediaType ?? "")
+                                                  releaseDate: self.moviesResponceData[indexForAppend].releaseDate ?? "",
+                                                  adult: self.moviesResponceData[indexForAppend].adult ?? false,
+                                                  backdropPath: self.moviesResponceData[indexForAppend].backdropPath ?? "",
+                                                  voteCount: self.moviesResponceData[indexForAppend].voteCount ?? 0,
+                                                  overview: self.moviesResponceData[indexForAppend].overview ?? "",
+                                                  originalLanguage: self.moviesResponceData[indexForAppend].originalLanguage ?? "",
+                                                  originalTitle: self.moviesResponceData[indexForAppend].originalTitle ?? "",
+                                                  posterPath: self.moviesResponceData[indexForAppend].posterPath ?? "",
+                                                  title: self.moviesResponceData[indexForAppend].title ?? "",
+                                                  video: self.moviesResponceData[indexForAppend].video ?? false,
+                                                  voteAverage: self.moviesResponceData[indexForAppend].voteAverage ?? 0.0,
+                                                  popularity: self.moviesResponceData[indexForAppend].popularity ?? 0.0,
+                                                  mediaType: self.moviesResponceData[indexForAppend].mediaType ?? "")
                     indexForAppend += 1
                 }
                 indexForAppend = 0
@@ -73,7 +75,7 @@ class RequestManager {
     
     func requestTvShows() {
         
-        AF.request(tvRequestUrl, method: .get).responseJSON { seriesResponceData1 in
+        AF.request(tvRequestUrl).responseJSON { seriesResponceData1 in
             
             do {
                 
@@ -84,22 +86,22 @@ class RequestManager {
                     self.tvShowsResponceData.append(seriesResponseModel.results![indexForAppend])
                     indexForAppend += 1
                 }
-                            
+                
                 indexForAppend = 0
                 
                 for _ in self.tvShowsResponceData {
                     DataManager.shared.saveTvShows(originalLanguage: self.tvShowsResponceData[indexForAppend].originalLanguage ?? "",
-                                              posterPath: self.tvShowsResponceData[indexForAppend].posterPath ?? "",
-                                              voteCount: self.tvShowsResponceData[indexForAppend].voteCount ?? 0,
-                                              voteAverage: self.tvShowsResponceData[indexForAppend].voteAverage ?? 0.0,
-                                              overview: self.tvShowsResponceData[indexForAppend].overview ?? "",
-                                              id: self.tvShowsResponceData[indexForAppend].id ?? 0,
-                                              originalName: self.tvShowsResponceData[indexForAppend].originalName ?? "",
-                                              firstAirDate: self.tvShowsResponceData[indexForAppend].firstAirDate ?? "",
-                                              name: self.tvShowsResponceData[indexForAppend].name ?? "",
-                                              backdropPath: self.tvShowsResponceData[indexForAppend].backdropPath ?? "",
-                                              popularity: self.tvShowsResponceData[indexForAppend].popularity ?? 0.0,
-                                              mediaType: self.tvShowsResponceData[indexForAppend].mediaType ?? "")
+                                                   posterPath: self.tvShowsResponceData[indexForAppend].posterPath ?? "",
+                                                   voteCount: self.tvShowsResponceData[indexForAppend].voteCount ?? 0,
+                                                   voteAverage: self.tvShowsResponceData[indexForAppend].voteAverage ?? 0.0,
+                                                   overview: self.tvShowsResponceData[indexForAppend].overview ?? "",
+                                                   id: self.tvShowsResponceData[indexForAppend].id ?? 0,
+                                                   originalName: self.tvShowsResponceData[indexForAppend].originalName ?? "",
+                                                   firstAirDate: self.tvShowsResponceData[indexForAppend].firstAirDate ?? "",
+                                                   name: self.tvShowsResponceData[indexForAppend].name ?? "",
+                                                   backdropPath: self.tvShowsResponceData[indexForAppend].backdropPath ?? "",
+                                                   popularity: self.tvShowsResponceData[indexForAppend].popularity ?? 0.0,
+                                                   mediaType: self.tvShowsResponceData[indexForAppend].mediaType ?? "")
                     indexForAppend += 1
                 }
                 indexForAppend = 0
@@ -110,11 +112,11 @@ class RequestManager {
     }
     
     func requestMovieCast(targetMovieId: Int) {
-
-        AF.request("https://api.themoviedb.org/3/movie/\(targetMovieId)/credits?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US", method: .get).responseJSON { [self] movieCastResponceData1 in
-
+        
+        AF.request("https://api.themoviedb.org/3/movie/\(targetMovieId)/credits?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US").responseJSON { [self] movieCastResponceData1 in
+            
             do {
-
+                
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
                 let movieCastResponseModel = try jsonDecoder.decode(MovieCastAndCrewResultsModel.self, from: movieCastResponceData1.data!)
@@ -122,22 +124,22 @@ class RequestManager {
                     self.movieCastResponceData.append(movieCastResponseModel.movieCast![indexForAppend])
                     indexForAppend += 1
                 }
-
+                
                 indexForAppend = 0
-
+                
                 for _ in self.movieCastResponceData {
                     DataManager.shared.saveMovieCast(adult: self.movieCastResponceData[indexForAppend].adult ?? false,
-                                           gender: self.movieCastResponceData[indexForAppend].gender ?? 0,
-                                           id: self.movieCastResponceData[indexForAppend].id ?? 0,
-                                           knownForDepartment: self.movieCastResponceData[indexForAppend].knownForDepartment ?? "",
-                                           name: self.movieCastResponceData[indexForAppend].name ?? "",
-                                           originalName: self.movieCastResponceData[indexForAppend].originalName ?? "",
-                                           popularity: self.movieCastResponceData[indexForAppend].popularity ?? 0.0,
-                                           profilePath: self.movieCastResponceData[indexForAppend].profilePath ?? "",
-                                           castId: self.movieCastResponceData[indexForAppend].castId ?? 0,
-                                           character: self.movieCastResponceData[indexForAppend].character ?? "",
-                                           creditId: self.movieCastResponceData[indexForAppend].creditId ?? "",
-                                           order: self.movieCastResponceData[indexForAppend].order ?? 0)
+                                                     gender: self.movieCastResponceData[indexForAppend].gender ?? 0,
+                                                     id: self.movieCastResponceData[indexForAppend].id ?? 0,
+                                                     knownForDepartment: self.movieCastResponceData[indexForAppend].knownForDepartment ?? "",
+                                                     name: self.movieCastResponceData[indexForAppend].name ?? "",
+                                                     originalName: self.movieCastResponceData[indexForAppend].originalName ?? "",
+                                                     popularity: self.movieCastResponceData[indexForAppend].popularity ?? 0.0,
+                                                     profilePath: self.movieCastResponceData[indexForAppend].profilePath ?? "",
+                                                     castId: self.movieCastResponceData[indexForAppend].castId ?? 0,
+                                                     character: self.movieCastResponceData[indexForAppend].character ?? "",
+                                                     creditId: self.movieCastResponceData[indexForAppend].creditId ?? "",
+                                                     order: self.movieCastResponceData[indexForAppend].order ?? 0)
                     indexForAppend += 1
                 }
                 indexForAppend = 0
@@ -150,11 +152,11 @@ class RequestManager {
     }
     
     func requestTvCast(targetShowId: Int) {
-
-        AF.request("https://api.themoviedb.org/3/tv/\(targetShowId)/credits?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US", method: .get).responseJSON { [self] tvCastResponceData1 in
-
+        
+        AF.request("https://api.themoviedb.org/3/tv/\(targetShowId)/credits?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US").responseJSON { [self] tvCastResponceData1 in
+            
             do {
-
+                
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
                 let tvCastResponseModel = try jsonDecoder.decode(TvCastAndCrewResultsModel.self, from: tvCastResponceData1.data!)
@@ -162,9 +164,9 @@ class RequestManager {
                     self.tvCastResponceData.append(tvCastResponseModel.tvCast![indexForAppend])
                     indexForAppend += 1
                 }
-
+                
                 indexForAppend = 0
-
+                
                 for _ in self.tvCastResponceData {
                     DataManager.shared.saveTvCast(adult: self.tvCastResponceData[indexForAppend].adult ?? false,
                                                   gender: self.tvCastResponceData[indexForAppend].gender ?? 0,
@@ -188,4 +190,79 @@ class RequestManager {
         }
     }
     
+    func requestMovieTrailers(targetMovie: Int) {
+        
+        AF.request("https://api.themoviedb.org/3/movie/\(targetMovie)/videos?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US").responseJSON { [self]movieTrailersResponceData1 in
+            
+            do {
+                
+                var indexForAppend = 0
+                let jsonDecoder = JSONDecoder()
+                let movieTrailersResponseModel = try jsonDecoder.decode(MovieTrailersRelultsModel.self, from: movieTrailersResponceData1.data!)
+                for _ in movieTrailersResponseModel.results! {
+                    self.movieTrailersResponceData.append(movieTrailersResponseModel.results![indexForAppend])
+                    indexForAppend += 1
+                }
+                
+                indexForAppend = 0
+                
+                for _ in self.movieTrailersResponceData {
+                    DataManager.shared.saveMovieTrailers(iso6391: self.movieTrailersResponceData[indexForAppend].iso6391 ?? "",
+                                                         iso31661: self.movieTrailersResponceData[indexForAppend].iso31661 ?? "",
+                                                         name: self.movieTrailersResponceData[indexForAppend].name ?? "",
+                                                         key: self.movieTrailersResponceData[indexForAppend].key ?? "",
+                                                         site: self.movieTrailersResponceData[indexForAppend].site ?? "",
+                                                         size: self.movieTrailersResponceData[indexForAppend].size ?? 0,
+                                                         type: self.movieTrailersResponceData[indexForAppend].type ?? "",
+                                                         official: self.movieTrailersResponceData[indexForAppend].official ?? false,
+                                                         publishedAt: self.movieTrailersResponceData[indexForAppend].publishedAt ?? "",
+                                                         id: self.movieTrailersResponceData[indexForAppend].id ?? "")
+                    indexForAppend += 1
+                }
+                indexForAppend = 0
+                detailsViewControllerInstance?.savedMovieTrailers = DataManager.shared.getMovieTrailers()
+                detailsViewControllerInstance?.detailsPlayerView.load(withVideoId: detailsViewControllerInstance?.savedMovieTrailers.first?.key ?? "")
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    func requestTvTrailers(targetShow: Int) {
+        
+        AF.request("https://api.themoviedb.org/3/tv/\(targetShow)/videos?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US").responseJSON { [self]tvTrailersResponceData1 in
+            
+            do {
+                
+                var indexForAppend = 0
+                let jsonDecoder = JSONDecoder()
+                let tvTrailersResponseModel = try jsonDecoder.decode(TvTrailersRelultsModel.self, from: tvTrailersResponceData1.data!)
+                for _ in tvTrailersResponseModel.results! {
+                    self.tvTrailersResponceData.append(tvTrailersResponseModel.results![indexForAppend])
+                    indexForAppend += 1
+                }
+                
+                indexForAppend = 0
+                
+                for _ in self.tvTrailersResponceData {
+                    DataManager.shared.saveTvTrailers(iso6391: self.tvTrailersResponceData[indexForAppend].iso6391 ?? "",
+                                                      iso31661: self.tvTrailersResponceData[indexForAppend].iso31661 ?? "",
+                                                      name: self.tvTrailersResponceData[indexForAppend].name ?? "",
+                                                      key: self.tvTrailersResponceData[indexForAppend].key ?? "",
+                                                      site: self.tvTrailersResponceData[indexForAppend].site ?? "",
+                                                      size: self.tvTrailersResponceData[indexForAppend].size ?? 0,
+                                                      type: self.tvTrailersResponceData[indexForAppend].type ?? "",
+                                                      official: self.tvTrailersResponceData[indexForAppend].official ?? false,
+                                                      publishedAt: self.tvTrailersResponceData[indexForAppend].publishedAt ?? "",
+                                                      id: self.tvTrailersResponceData[indexForAppend].id ?? "")
+                    indexForAppend += 1
+                }
+                indexForAppend = 0
+                detailsViewControllerInstance?.savedTvTrailers = DataManager.shared.getTvTrailers()
+                detailsViewControllerInstance?.detailsPlayerView.load(withVideoId: detailsViewControllerInstance?.savedTvTrailers.first?.key ?? "")
+            } catch {
+                print(error)
+            }
+        }
+    }
 }

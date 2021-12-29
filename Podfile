@@ -5,5 +5,6 @@ target 'CourseProject' do
   pod 'SDWebImage'
   pod 'RealmSwift'
   pod 'lottie-ios'
+  pod 'youtube-ios-player-helper'
 
 end

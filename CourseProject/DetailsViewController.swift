@@ -8,6 +8,7 @@
 import UIKit
 import SDWebImage
 import RealmSwift
+import youtube_ios_player_helper
 
 class DetailsViewController: UIViewController {
     
@@ -25,7 +26,10 @@ class DetailsViewController: UIViewController {
     var targetTvShow: Int = 0
     var savedMovieCast: [MovieCastResultsToSave] = []
     var savedTvCast: [TvCastResultsToSave] = []
+    var savedMovieTrailers: [MovieTrailersRelultsToSave] = []
+    var savedTvTrailers: [TvTrailersRelultsToSave] = []
     var movieOrTvShow: Int = 0
+    var videoId: String = ""
     
     let transformerForBackground = SDImageResizingTransformer(size: CGSize(width: 414, height: 896), scaleMode: .fill)
     let transformerForPoster = SDImageResizingTransformer(size: CGSize(width: 300, height: 450), scaleMode: .fill)
@@ -39,6 +43,7 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var detailsMainView: UIView!
     @IBOutlet weak var detailsLanguageLabel: UILabel!
     @IBOutlet weak var detailsCastCollectionView: UICollectionView!
+    @IBOutlet weak var detailsPlayerView: YTPlayerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,10 +69,20 @@ class DetailsViewController: UIViewController {
             detailsLanguageLabel.text = "Original language: Russian"
         } else if detailsOriginalLanguage == "ko" {
             detailsLanguageLabel.text = "Original language: Korean"
+        } else if detailsOriginalLanguage == "it" {
+            detailsLanguageLabel.text = "Original language: Italian"
+        } else if detailsOriginalLanguage == "ja" {
+            detailsLanguageLabel.text = "Original language: Japanese"
+        } else if detailsOriginalLanguage == "fr" {
+            detailsLanguageLabel.text = "Original language: French"
+        } else if detailsOriginalLanguage == "ml" {
+            detailsLanguageLabel.text = "Original language: Malayalam"
         } else {
             detailsLanguageLabel.text = detailsOriginalLanguage
         }
         self.detailsCastCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
+        self.detailsPlayerView.load(withVideoId: videoId)
+        self.detailsPlayerView.layer.cornerRadius = 25
     }
     
     override func viewWillAppear(_ animated: Bool) {

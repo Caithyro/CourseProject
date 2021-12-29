@@ -14,6 +14,10 @@ class TrendingViewController: UIViewController {
     
     @IBOutlet weak var TrendingCollectionView: UICollectionView!
     @IBOutlet weak var trendingSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var trendingSearchBar: UISearchBar!
+    @IBOutlet weak var saveMessageView: UIView!
+    @IBOutlet weak var saveMessageLabel: UILabel!
+    @IBOutlet weak var SaveMessageTopConstraint: NSLayoutConstraint!
     
     var savedMoviesArray : [MoviesResultsToSave] = []
     var savedSeriesArray : [TvResultsToSave] = []
@@ -23,6 +27,9 @@ class TrendingViewController: UIViewController {
         
         RequestManager.shared.trendingViewControllerInstance = self
         DetailsViewController.shared.trendingViewControllerInstance = self
+        WatchLaterViewController.shared.trendingViewControllerInstance = self
+        TrendingCollectionViewCell.shared.trendingViewControllerInstance = self
+        DataManager.shared.trendingViewControllerInstance = self
         
         trendingSegmentedControl.selectedSegmentIndex = 0
         
@@ -36,7 +43,6 @@ class TrendingViewController: UIViewController {
         
         self.TrendingCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.TrendingCollectionView.register(UINib(nibName: "TrendingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "TrendingCollectionViewCell")
-        
         self.title = "Trending for today"
         
     }
@@ -46,7 +52,30 @@ class TrendingViewController: UIViewController {
         
         self.tabBarController?.tabBar.layer.isHidden = false
         self.navigationController?.navigationBar.isHidden = false
-
+    }
+    
+    func saveSuccessfull() {
+        self.saveMessageLabel.text = "Saved succesfully!"
+        self.saveMessageView.layer.cornerRadius = 15
+        self.saveMessageView.layer.backgroundColor = CGColor(genericCMYKCyan: 0.26, magenta: 0.2, yellow: 0.22, black: 0.2, alpha: 0.7)
+        UIView.animate(withDuration: 1, delay: 0, options: [.autoreverse]) {
+            self.SaveMessageTopConstraint.constant = -16
+            self.view.layoutIfNeeded()
+        } completion: { (finished: Bool) in
+            self.SaveMessageTopConstraint.constant = 200
+        }
+    }
+    
+    func saveFailed() {
+        self.saveMessageLabel.text = "Save failed!"
+        self.saveMessageView.layer.cornerRadius = 15
+        self.saveMessageView.layer.backgroundColor = CGColor(genericCMYKCyan: 0.26, magenta: 0.2, yellow: 0.22, black: 0.2, alpha: 0.7)
+        UIView.animate(withDuration: 1, delay: 0, options: [.autoreverse]) {
+            self.SaveMessageTopConstraint.constant = -16
+            self.view.layoutIfNeeded()
+        } completion: { (finished: Bool) in
+            self.SaveMessageTopConstraint.constant = 200
+        }
     }
     
     @IBAction func trendingSegmentedControlSwitched(_ sender: Any) {
@@ -65,13 +94,13 @@ class TrendingViewController: UIViewController {
 extension TrendingViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            return savedMoviesArray.count
-        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
-            return savedSeriesArray.count
-        } else {
-            return 0
+       
+            if trendingSegmentedControl.selectedSegmentIndex == 0 {
+                return savedMoviesArray.count
+            } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+                return savedSeriesArray.count
+            } else {
+                return 0
         }
     }
     
@@ -84,6 +113,7 @@ extension TrendingViewController: UICollectionViewDataSource {
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
             movieDataToDisplay = savedMoviesArray[indexPath.row]
+            TrendingCollectionViewCell.shared.moviesData = movieDataToDisplay
             trendingCell.configureMoviesCell(dataToDisplay: movieDataToDisplay)
         } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
             tvDataToDisplay = savedSeriesArray[indexPath.row]
@@ -97,7 +127,7 @@ extension TrendingViewController: UICollectionViewDataSource {
 }
 
 extension TrendingViewController: UICollectionViewDelegate {
-
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         var movieDataToDisplay = MoviesResultsToSave()
@@ -109,6 +139,7 @@ extension TrendingViewController: UICollectionViewDelegate {
             if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
                 navigationController?.pushViewController(detailsViewController, animated: true)
                 RequestManager.shared.requestMovieCast(targetMovieId: movieDataToDisplay.id)
+                RequestManager.shared.requestMovieTrailers(targetMovie: movieDataToDisplay.id)
                 detailsViewController.backgroundImageViewURL = movieDataToDisplay.posterPath
                 detailsViewController.detailsTitle = movieDataToDisplay.title
                 detailsViewController.detailsPosterURL = movieDataToDisplay.posterPath
@@ -125,6 +156,7 @@ extension TrendingViewController: UICollectionViewDelegate {
             if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
                 navigationController?.pushViewController(detailsViewController, animated: true)
                 RequestManager.shared.requestTvCast(targetShowId: tvDataToDisplay.id)
+                RequestManager.shared.requestTvTrailers(targetShow: tvDataToDisplay.id)
                 detailsViewController.backgroundImageViewURL = tvDataToDisplay.posterPath
                 detailsViewController.detailsTitle = tvDataToDisplay.name
                 detailsViewController.detailsPosterURL = tvDataToDisplay.posterPath
@@ -138,3 +170,4 @@ extension TrendingViewController: UICollectionViewDelegate {
         }
     }
 }
+
