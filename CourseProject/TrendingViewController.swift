@@ -21,6 +21,7 @@ class TrendingViewController: UIViewController {
     
     var savedMoviesArray : [MoviesResultsToSave] = []
     var savedSeriesArray : [TvResultsToSave] = []
+    var searchPerformed: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,7 @@ class TrendingViewController: UIViewController {
         DataManager.shared.trendingViewControllerInstance = self
         
         trendingSegmentedControl.selectedSegmentIndex = 0
+        trendingSearchBar.showsCancelButton = true
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
             RequestManager.shared.requestMovies()
@@ -90,83 +92,190 @@ class TrendingViewController: UIViewController {
     }
 }
 
-extension TrendingViewController: UICollectionViewDataSource {
+extension TrendingViewController: UICollectionViewDataSource, UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if trendingSegmentedControl.selectedSegmentIndex == 0 {
+            RequestManager.shared.movieSearchRequest(query: trendingSearchBar.text ?? "")
+            searchPerformed = true
+            TrendingCollectionViewCell.shared.searchPerformed = true
+        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+            RequestManager.shared.tvSearchRequest(query: trendingSearchBar.text ?? "")
+            searchPerformed = true
+            TrendingCollectionViewCell.shared.searchPerformed = true
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchPerformed = false
+        TrendingCollectionView.reloadData()
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       
-            if trendingSegmentedControl.selectedSegmentIndex == 0 {
-                return savedMoviesArray.count
-            } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
-                return savedSeriesArray.count
+        
+        if trendingSegmentedControl.selectedSegmentIndex == 0 {
+            if searchPerformed == true {
+                return RequestManager.shared.movieSearchResponceData.count
             } else {
-                return 0
+                return savedMoviesArray.count
+            }
+        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+            if searchPerformed == true {
+                return RequestManager.shared.tvSearchResponceData.count
+            } else {
+                return savedSeriesArray.count
+            }
+        } else {
+            return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let trendingCell = TrendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
-        
-        var movieDataToDisplay = MoviesResultsToSave()
-        var tvDataToDisplay = TvResultsToSave()
-        
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            movieDataToDisplay = savedMoviesArray[indexPath.row]
-            TrendingCollectionViewCell.shared.moviesData = movieDataToDisplay
-            trendingCell.configureMoviesCell(dataToDisplay: movieDataToDisplay)
-        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
-            tvDataToDisplay = savedSeriesArray[indexPath.row]
-            trendingCell.configureSeriesCell(dataToDisplay: tvDataToDisplay)
+            if searchPerformed == true {
+                guard let trendingCell = TrendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
+                
+                var moviesDataToDisplay = RequestManager.shared.movieSearchResponceData
+                var eachSearchedMovie = moviesDataToDisplay[indexPath.row]
+                trendingCell.configureMoviesSearchCell(dataToDisplay: eachSearchedMovie)
+                for _ in moviesDataToDisplay {
+                    moviesDataToDisplay.remove(at: 0)
+                }
+                
+                return trendingCell
+                
+            } else {
+                guard let trendingCell = TrendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
+                
+                var movieDataToDisplay = MoviesResultsToSave()
+                var tvDataToDisplay = TvResultsToSave()
+                
+                if trendingSegmentedControl.selectedSegmentIndex == 0 {
+                    movieDataToDisplay = savedMoviesArray[indexPath.row]
+                    TrendingCollectionViewCell.shared.moviesData = movieDataToDisplay
+                    trendingCell.configureMoviesCell(dataToDisplay: movieDataToDisplay)
+                } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+                    tvDataToDisplay = savedSeriesArray[indexPath.row]
+                    trendingCell.configureSeriesCell(dataToDisplay: tvDataToDisplay)
+                }
+                
+                return trendingCell
+            }
+        } else {
+            if searchPerformed == true {
+                guard let trendingCell = TrendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
+                
+                var tvDataToDisplay = RequestManager.shared.tvSearchResponceData
+                var eachSearchedTvShow = tvDataToDisplay[indexPath.row]
+                trendingCell.configureSeriesSearchCell(dataToDisplay: eachSearchedTvShow)
+                for _ in tvDataToDisplay {
+                    tvDataToDisplay.remove(at: 0)
+                }
+                
+                return trendingCell
+                
+            } else {
+                guard let trendingCell = TrendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
+                
+                var movieDataToDisplay = MoviesResultsToSave()
+                var tvDataToDisplay = TvResultsToSave()
+                
+                if trendingSegmentedControl.selectedSegmentIndex == 0 {
+                    movieDataToDisplay = savedMoviesArray[indexPath.row]
+                    TrendingCollectionViewCell.shared.moviesData = movieDataToDisplay
+                    trendingCell.configureMoviesCell(dataToDisplay: movieDataToDisplay)
+                } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+                    tvDataToDisplay = savedSeriesArray[indexPath.row]
+                    trendingCell.configureSeriesCell(dataToDisplay: tvDataToDisplay)
+                }
+                
+                return trendingCell
+            }
         }
-        
-        return trendingCell
     }
-    
-    
 }
 
 extension TrendingViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        var movieDataToDisplay = MoviesResultsToSave()
-        var tvDataToDisplay = TvResultsToSave()
-        
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
+            var movieDataToDisplay = MoviesResultsToSave()
             movieDataToDisplay = savedMoviesArray[indexPath.row]
-            let main = UIStoryboard(name: "Main", bundle: nil)
-            if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
-                navigationController?.pushViewController(detailsViewController, animated: true)
-                RequestManager.shared.requestMovieCast(targetMovieId: movieDataToDisplay.id)
-                RequestManager.shared.requestMovieTrailers(targetMovie: movieDataToDisplay.id)
-                detailsViewController.backgroundImageViewURL = movieDataToDisplay.posterPath
-                detailsViewController.detailsTitle = movieDataToDisplay.title
-                detailsViewController.detailsPosterURL = movieDataToDisplay.posterPath
-                detailsViewController.detailsDescription = movieDataToDisplay.overview
-                detailsViewController.detailsAverageVote = movieDataToDisplay.voteAverage
-                detailsViewController.detailsVoteCount = movieDataToDisplay.voteCount
-                detailsViewController.detailsOriginalLanguage = movieDataToDisplay.originalLanguage
-                detailsViewController.targetMovie = movieDataToDisplay.id
-                detailsViewController.movieOrTvShow = 0
+            if searchPerformed == true {
+                var movieRequestDataToDisplay = RequestManager.shared.movieSearchResponceData
+                var eachSearchedMovie = movieRequestDataToDisplay[indexPath.row]
+                let main = UIStoryboard(name: "Main", bundle: nil)
+                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                    navigationController?.pushViewController(detailsViewController, animated: true)
+                    RequestManager.shared.requestMovieCast(targetMovieId: eachSearchedMovie.id ?? 0)
+                    RequestManager.shared.requestMovieTrailers(targetMovie: eachSearchedMovie.id ?? 0)
+                    detailsViewController.backgroundImageViewURL = eachSearchedMovie.posterPath ?? ""
+                    detailsViewController.detailsTitle = eachSearchedMovie.title ?? ""
+                    detailsViewController.detailsPosterURL = eachSearchedMovie.posterPath ?? ""
+                    detailsViewController.detailsDescription = eachSearchedMovie.overview ?? ""
+                    detailsViewController.detailsAverageVote = eachSearchedMovie.voteAverage ?? 0.0
+                    detailsViewController.detailsVoteCount = eachSearchedMovie.voteCount ?? 0
+                    detailsViewController.detailsOriginalLanguage = eachSearchedMovie.originalLanguage ?? ""
+                    detailsViewController.targetMovie = eachSearchedMovie.id ?? 0
+                    detailsViewController.movieOrTvShow = 0
+                }
+            } else {
+                let main = UIStoryboard(name: "Main", bundle: nil)
+                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                    navigationController?.pushViewController(detailsViewController, animated: true)
+                    RequestManager.shared.requestMovieCast(targetMovieId: movieDataToDisplay.id)
+                    RequestManager.shared.requestMovieTrailers(targetMovie: movieDataToDisplay.id)
+                    detailsViewController.backgroundImageViewURL = movieDataToDisplay.posterPath
+                    detailsViewController.detailsTitle = movieDataToDisplay.title
+                    detailsViewController.detailsPosterURL = movieDataToDisplay.posterPath
+                    detailsViewController.detailsDescription = movieDataToDisplay.overview
+                    detailsViewController.detailsAverageVote = movieDataToDisplay.voteAverage
+                    detailsViewController.detailsVoteCount = movieDataToDisplay.voteCount
+                    detailsViewController.detailsOriginalLanguage = movieDataToDisplay.originalLanguage
+                    detailsViewController.targetMovie = movieDataToDisplay.id
+                    detailsViewController.movieOrTvShow = 0
+                }
             }
         } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+            var tvDataToDisplay = TvResultsToSave()
             tvDataToDisplay = savedSeriesArray[indexPath.row]
-            let main = UIStoryboard(name: "Main", bundle: nil)
-            if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
-                navigationController?.pushViewController(detailsViewController, animated: true)
-                RequestManager.shared.requestTvCast(targetShowId: tvDataToDisplay.id)
-                RequestManager.shared.requestTvTrailers(targetShow: tvDataToDisplay.id)
-                detailsViewController.backgroundImageViewURL = tvDataToDisplay.posterPath
-                detailsViewController.detailsTitle = tvDataToDisplay.name
-                detailsViewController.detailsPosterURL = tvDataToDisplay.posterPath
-                detailsViewController.detailsDescription = tvDataToDisplay.overview
-                detailsViewController.detailsAverageVote = tvDataToDisplay.voteAverage
-                detailsViewController.detailsVoteCount = tvDataToDisplay.voteCount
-                detailsViewController.detailsOriginalLanguage = tvDataToDisplay.originalLanguage
-                detailsViewController.targetTvShow = tvDataToDisplay.id
-                detailsViewController.movieOrTvShow = 1
+            if searchPerformed == true {
+                var tvRequestDataToDisplay = RequestManager.shared.tvSearchResponceData
+                var eachSearchedTvShow = tvRequestDataToDisplay[indexPath.row]
+                let main = UIStoryboard(name: "Main", bundle: nil)
+                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                    navigationController?.pushViewController(detailsViewController, animated: true)
+                    RequestManager.shared.requestTvCast(targetShowId: eachSearchedTvShow.id ?? 0)
+                    RequestManager.shared.requestTvTrailers(targetShow: eachSearchedTvShow.id ?? 0)
+                    detailsViewController.backgroundImageViewURL = eachSearchedTvShow.posterPath ?? ""
+                    detailsViewController.detailsTitle = eachSearchedTvShow.name ?? ""
+                    detailsViewController.detailsPosterURL = eachSearchedTvShow.posterPath ?? ""
+                    detailsViewController.detailsDescription = eachSearchedTvShow.overview ?? ""
+                    detailsViewController.detailsAverageVote = eachSearchedTvShow.voteAverage ?? 0.0
+                    detailsViewController.detailsVoteCount = eachSearchedTvShow.voteCount ?? 0
+                    detailsViewController.detailsOriginalLanguage = eachSearchedTvShow.originalLanguage ?? ""
+                    detailsViewController.targetTvShow = eachSearchedTvShow.id ?? 0
+                    detailsViewController.movieOrTvShow = 1
+                }
+            } else {
+                let main = UIStoryboard(name: "Main", bundle: nil)
+                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                    navigationController?.pushViewController(detailsViewController, animated: true)
+                    RequestManager.shared.requestTvCast(targetShowId: tvDataToDisplay.id)
+                    RequestManager.shared.requestTvTrailers(targetShow: tvDataToDisplay.id)
+                    detailsViewController.backgroundImageViewURL = tvDataToDisplay.posterPath
+                    detailsViewController.detailsTitle = tvDataToDisplay.name
+                    detailsViewController.detailsPosterURL = tvDataToDisplay.posterPath
+                    detailsViewController.detailsDescription = tvDataToDisplay.overview
+                    detailsViewController.detailsAverageVote = tvDataToDisplay.voteAverage
+                    detailsViewController.detailsVoteCount = tvDataToDisplay.voteCount
+                    detailsViewController.detailsOriginalLanguage = tvDataToDisplay.originalLanguage
+                    detailsViewController.targetTvShow = tvDataToDisplay.id
+                    detailsViewController.movieOrTvShow = 1
+                }
             }
         }
     }
 }
-

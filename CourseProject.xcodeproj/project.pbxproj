@@ -35,6 +35,10 @@
 		6699B21A27766B09003A4402 /* TvCrewResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6699B21727766B09003A4402 /* TvCrewResults.swift */; };
 		6699B21B27766B09003A4402 /* TvCastResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6699B21827766B09003A4402 /* TvCastResults.swift */; };
 		6699B21C27766B09003A4402 /* TvCastAndCrewResultsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6699B21927766B09003A4402 /* TvCastAndCrewResultsModel.swift */; };
+		66BECACD2785B43500E74339 /* MovieSearchRelultsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BECACB2785B43500E74339 /* MovieSearchRelultsModel.swift */; };
+		66BECACE2785B43500E74339 /* MovieSearchRelults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BECACC2785B43500E74339 /* MovieSearchRelults.swift */; };
+		66BECAD32785F29B00E74339 /* TvSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BECAD12785F29B00E74339 /* TvSearchResults.swift */; };
+		66BECAD42785F29B00E74339 /* TvSearchResultsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66BECAD22785F29B00E74339 /* TvSearchResultsModel.swift */; };
 		66CF1CEB2775367100FBB614 /* DetailsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CF1CE92775367100FBB614 /* DetailsCollectionViewCell.swift */; };
 		66CF1CEC2775367100FBB614 /* DetailsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66CF1CEA2775367100FBB614 /* DetailsCollectionViewCell.xib */; };
 		66DC45A1277896C800CD1FB1 /* heartAnimation.json in Resources */ = {isa = PBXBuildFile; fileRef = 66DC45A0277896C800CD1FB1 /* heartAnimation.json */; };
@@ -76,6 +80,10 @@
 		6699B21727766B09003A4402 /* TvCrewResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TvCrewResults.swift; sourceTree = "<group>"; };
 		6699B21827766B09003A4402 /* TvCastResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TvCastResults.swift; sourceTree = "<group>"; };
 		6699B21927766B09003A4402 /* TvCastAndCrewResultsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TvCastAndCrewResultsModel.swift; sourceTree = "<group>"; };
+		66BECACB2785B43500E74339 /* MovieSearchRelultsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieSearchRelultsModel.swift; sourceTree = "<group>"; };
+		66BECACC2785B43500E74339 /* MovieSearchRelults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieSearchRelults.swift; sourceTree = "<group>"; };
+		66BECAD12785F29B00E74339 /* TvSearchResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TvSearchResults.swift; sourceTree = "<group>"; };
+		66BECAD22785F29B00E74339 /* TvSearchResultsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TvSearchResultsModel.swift; sourceTree = "<group>"; };
 		66CF1CE92775367100FBB614 /* DetailsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsCollectionViewCell.swift; sourceTree = "<group>"; };
 		66CF1CEA2775367100FBB614 /* DetailsCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailsCollectionViewCell.xib; sourceTree = "<group>"; };
 		66DC45A0277896C800CD1FB1 /* heartAnimation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = heartAnimation.json; sourceTree = "<group>"; };
@@ -173,6 +181,8 @@
 		6676FBF527773E8900CC6FC1 /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				66BECACB2785B43500E74339 /* MovieSearchRelultsModel.swift */,
+				66BECACC2785B43500E74339 /* MovieSearchRelults.swift */,
 				668F11DD2775C91800F7D968 /* MovieCastAndCrewResultsModel.swift */,
 				668F11DB2775C91700F7D968 /* MovieCastResults.swift */,
 				668F11DC2775C91800F7D968 /* MovieCrewResults.swift */,
@@ -187,6 +197,8 @@
 		6676FBF627773E9D00CC6FC1 /* TvShows */ = {
 			isa = PBXGroup;
 			children = (
+				66BECAD22785F29B00E74339 /* TvSearchResultsModel.swift */,
+				66BECAD12785F29B00E74339 /* TvSearchResults.swift */,
 				6676FBF72777522800CC6FC1 /* TvTrailersRelultsModel.swift */,
 				6676FBF82777522900CC6FC1 /* TvTrailersRelults.swift */,
 				6699B21827766B09003A4402 /* TvCastResults.swift */,
@@ -370,15 +382,18 @@
 				6699B21B27766B09003A4402 /* TvCastResults.swift in Sources */,
 				6676FBF327773E2600CC6FC1 /* MovieTrailersRelults.swift in Sources */,
 				664A35F927722FA1001098FA /* TrendingViewController.swift in Sources */,
+				66BECAD42785F29B00E74339 /* TvSearchResultsModel.swift in Sources */,
 				668F11E02775C91800F7D968 /* MovieCastAndCrewResultsModel.swift in Sources */,
 				668F11DF2775C91800F7D968 /* MovieCrewResults.swift in Sources */,
 				668F11E22775CC2800F7D968 /* RequestManager.swift in Sources */,
+				66BECACD2785B43500E74339 /* MovieSearchRelultsModel.swift in Sources */,
 				664A35F527722FA1001098FA /* AppDelegate.swift in Sources */,
 				668F11DA2775C90E00F7D968 /* MoviesResults.swift in Sources */,
 				6699B21A27766B09003A4402 /* TvCrewResults.swift in Sources */,
 				664A3610277241DB001098FA /* WatchLaterViewController.swift in Sources */,
 				664A361427724215001098FA /* WatchLaterCollectionViewCell.swift in Sources */,
 				668F11DE2775C91800F7D968 /* MovieCastResults.swift in Sources */,
+				66BECAD32785F29B00E74339 /* TvSearchResults.swift in Sources */,
 				6699B21C27766B09003A4402 /* TvCastAndCrewResultsModel.swift in Sources */,
 				6676FBF427773E2600CC6FC1 /* MovieTrailersRelultsModel.swift in Sources */,
 				668F11D62775C8FF00F7D968 /* TvResultsModel.swift in Sources */,
@@ -386,6 +401,7 @@
 				6676FBFA2777522900CC6FC1 /* TvTrailersRelults.swift in Sources */,
 				664A36172772425E001098FA /* DetailsViewController.swift in Sources */,
 				664A360D2772413D001098FA /* TrendingCollectionViewCell.swift in Sources */,
+				66BECACE2785B43500E74339 /* MovieSearchRelults.swift in Sources */,
 				668F11D52775C8FF00F7D968 /* TvResults.swift in Sources */,
 				664A35F727722FA1001098FA /* SceneDelegate.swift in Sources */,
 				668F11D92775C90E00F7D968 /* MoviesResultsModel.swift in Sources */,
@@ -538,6 +554,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5SL6Y86ZKW;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CourseProject/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -545,6 +562,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -566,6 +584,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5SL6Y86ZKW;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CourseProject/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -573,6 +592,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

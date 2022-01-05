@@ -21,6 +21,8 @@ class RequestManager {
     var tvCastResponceData: [TvCastResults] = []
     var movieTrailersResponceData: [MovieTrailersRelults] = []
     var tvTrailersResponceData: [TvTrailersRelults] = []
+    var movieSearchResponceData: [MovieSearchResults] = []
+    var tvSearchResponceData: [TvSearchResults] = []
     var movieId = ""
     let movieRequestUrl = "https://api.themoviedb.org/3/trending/movie/day?api_key=0b7fec5fcf33f299afcdde35a5fa4843"
     let tvRequestUrl = "https://api.themoviedb.org/3/trending/tv/day?api_key=0b7fec5fcf33f299afcdde35a5fa4843"
@@ -41,9 +43,7 @@ class RequestManager {
                 
                 indexForAppend = 0
                 
-//                if DataManager.shared.moviesRealm.isEmpty == false {
-//                    DataManager.shared.clearMoviesRealm()
-//                }
+                DataManager.shared.clearTrendingMovies()
                 
                 for _ in self.moviesResponceData {
                     DataManager.shared.saveMovies(id: self.moviesResponceData[indexForAppend].id ?? 0,
@@ -89,6 +89,8 @@ class RequestManager {
                 
                 indexForAppend = 0
                 
+                DataManager.shared.clearTrendingSeries()
+                
                 for _ in self.tvShowsResponceData {
                     DataManager.shared.saveTvShows(originalLanguage: self.tvShowsResponceData[indexForAppend].originalLanguage ?? "",
                                                    posterPath: self.tvShowsResponceData[indexForAppend].posterPath ?? "",
@@ -126,6 +128,8 @@ class RequestManager {
                 }
                 
                 indexForAppend = 0
+                
+                DataManager.shared.clearMovieCast()
                 
                 for _ in self.movieCastResponceData {
                     DataManager.shared.saveMovieCast(adult: self.movieCastResponceData[indexForAppend].adult ?? false,
@@ -166,6 +170,8 @@ class RequestManager {
                 }
                 
                 indexForAppend = 0
+                
+                DataManager.shared.clearTvCast()
                 
                 for _ in self.tvCastResponceData {
                     DataManager.shared.saveTvCast(adult: self.tvCastResponceData[indexForAppend].adult ?? false,
@@ -263,6 +269,54 @@ class RequestManager {
             } catch {
                 print(error)
             }
+        }
+    }
+    
+    func movieSearchRequest(query: String) {
+        
+        let emptyData = Data.init()
+        let rightQuery = query.replacingOccurrences(of: " ", with: "%20")
+        
+        AF.request("https://api.themoviedb.org/3/search/movie?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US&query=\(rightQuery)&page=1&include_adult=false").responseJSON { [self]movieSearchResponceData1 in
+            
+            do {
+                self.movieSearchResponceData.removeAll()
+                var indexForAppend = 0
+                let jsonDecoder = JSONDecoder()
+                let movieSearchResponseModel = try jsonDecoder.decode(MovieSearchResultsModel.self, from: movieSearchResponceData1.data ?? emptyData)
+                for _ in movieSearchResponseModel.results ?? [] {
+                    self.movieSearchResponceData.append(movieSearchResponseModel.results![indexForAppend])
+                    indexForAppend += 1
+                }
+                indexForAppend = 0
+            } catch {
+                print(error)
+            }
+            trendingViewControllerInstance?.TrendingCollectionView.reloadData()
+        }
+    }
+    
+    func tvSearchRequest(query: String) {
+        
+        let emptyData = Data.init()
+        let rightQuery = query.replacingOccurrences(of: " ", with: "%20")
+        
+        AF.request("https://api.themoviedb.org/3/search/tv?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US&page=1&query=\(rightQuery)&include_adult=false").responseJSON { [self]tvSearchResponceData1 in
+            
+            do {
+                self.tvSearchResponceData.removeAll()
+                var indexForAppend = 0
+                let jsonDecoder = JSONDecoder()
+                let tvSearchResponseModel = try jsonDecoder.decode(TvSearchResultsModel.self, from: tvSearchResponceData1.data ?? emptyData)
+                for _ in tvSearchResponseModel.results ?? [] {
+                    self.tvSearchResponceData.append(tvSearchResponseModel.results![indexForAppend])
+                    indexForAppend += 1
+                }
+                indexForAppend = 0
+            } catch {
+                print(error)
+            }
+            trendingViewControllerInstance?.TrendingCollectionView.reloadData()
         }
     }
 }

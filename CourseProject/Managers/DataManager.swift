@@ -69,9 +69,9 @@ class DataManager {
         let moviesData = MoviesResultsToSaveToWatchLater(value: [id, "\(releaseDate)", adult, "\(backdropPath)", voteCount, "\(overview)", "\(originalLanguage)", "\(originalTitle)", "\(posterPath)", "\(title)", video, voteAverage, popularity, "\(mediaType)"])
         
         do {
-        try! realm.write {
-            realm.create(MoviesResultsToSaveToWatchLater.self, value: moviesData, update: .all)
-        }
+            try! realm.write {
+                realm.create(MoviesResultsToSaveToWatchLater.self, value: moviesData, update: .all)
+            }
             trendingViewControllerInstance?.saveSuccessfull()
         } catch {
             trendingViewControllerInstance?.saveFailed()
@@ -81,11 +81,15 @@ class DataManager {
     func saveTvShowsToWatchLater(originalLanguage : String, posterPath: String, voteCount: Int, voteAverage: Double, overview: String, id: Int, originalName: String, firstAirDate: String, name: String, backdropPath: String, popularity: Double, mediaType: String) {
         let tvShowsData = TvResultsToSaveToWatchLater(value: ["\(originalLanguage)", "\(posterPath)", voteCount, voteAverage, "\(overview)", id, "\(originalName)", "\(firstAirDate)", "\(name)", "\(backdropPath)", popularity, "\(mediaType)"])
         
-        try! realm.write {
-            realm.create(TvResultsToSaveToWatchLater.self, value: tvShowsData, update: .all)
+        do {
+            try! realm.write {
+                realm.create(TvResultsToSaveToWatchLater.self, value: tvShowsData, update: .all)
+            }
+            trendingViewControllerInstance?.saveSuccessfull()
+        } catch {
+            trendingViewControllerInstance?.saveFailed()
         }
     }
-    
     
     func getMovies() -> [MoviesResultsToSave] {
         var moviesArray = [MoviesResultsToSave]()
@@ -187,6 +191,30 @@ class DataManager {
         }
         watchLaterViewControllerInstance?.savedSeriesData = DataManager.shared.getTvWatchLaterList()
         watchLaterViewControllerInstance?.watchLaterCollectionView.reloadData()
+    }
+    
+    func clearTrendingMovies() {
+        try! realm.write {
+            realm.delete(realm.objects(MoviesResultsToSave.self))
+        }
+    }
+    
+    func clearTrendingSeries() {
+        try! realm.write {
+            realm.delete(realm.objects(TvResultsToSave.self))
+        }
+    }
+    
+    func clearMovieCast() {
+        try! realm.write {
+            realm.delete(realm.objects(MovieCastResultsToSave.self))
+        }
+    }
+    
+    func clearTvCast() {
+        try! realm.write {
+            realm.delete(realm.objects(TvCastResultsToSave.self))
+        }
     }
 }
 
