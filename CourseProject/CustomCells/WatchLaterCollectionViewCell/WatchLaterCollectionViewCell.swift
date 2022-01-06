@@ -33,7 +33,7 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
     @IBAction func deleteButtonPressed(_ sender: Any) {
         runDeleteAnimation()
     }
-        
+    
     
     func runDeleteAnimation() {
         animationView = .init(name: "deleteAnimation")

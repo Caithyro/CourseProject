@@ -62,21 +62,21 @@ class TrendingCollectionViewCell: UICollectionViewCell {
                                                           popularity: self.movieRequestDataToDisplay.popularity,
                                                           mediaType: self.movieRequestDataToDisplay.mediaType)
             } else {
-            DataManager.shared.saveMoviesToWatchLater(id: self.moviesData.id,
-                                                      releaseDate: self.moviesData.releaseDate,
-                                                      adult: self.moviesData.adult,
-                                                      backdropPath: self.moviesData.backdropPath,
-                                                      voteCount: self.moviesData.voteCount,
-                                                      overview: self.moviesData.overview,
-                                                      originalLanguage: self.moviesData.originalLanguage,
-                                                      originalTitle: self.moviesData.originalTitle,
-                                                      posterPath: self.moviesData.posterPath,
-                                                      title: self.moviesData.title,
-                                                      video: self.moviesData.video,
-                                                      voteAverage: self.moviesData.voteAverage,
-                                                      popularity: self.moviesData.popularity,
-                                                      mediaType: self.moviesData.mediaType)
-        }
+                DataManager.shared.saveMoviesToWatchLater(id: self.moviesData.id,
+                                                          releaseDate: self.moviesData.releaseDate,
+                                                          adult: self.moviesData.adult,
+                                                          backdropPath: self.moviesData.backdropPath,
+                                                          voteCount: self.moviesData.voteCount,
+                                                          overview: self.moviesData.overview,
+                                                          originalLanguage: self.moviesData.originalLanguage,
+                                                          originalTitle: self.moviesData.originalTitle,
+                                                          posterPath: self.moviesData.posterPath,
+                                                          title: self.moviesData.title,
+                                                          video: self.moviesData.video,
+                                                          voteAverage: self.moviesData.voteAverage,
+                                                          popularity: self.moviesData.popularity,
+                                                          mediaType: self.moviesData.mediaType)
+            }
         } else {
             if TrendingCollectionViewCell.shared.searchPerformed == true {
                 DataManager.shared.saveTvShowsToWatchLater(originalLanguage: self.tvRequestDataToDisplay.originalLanguage,
@@ -92,18 +92,18 @@ class TrendingCollectionViewCell: UICollectionViewCell {
                                                            popularity: self.tvRequestDataToDisplay.popularity,
                                                            mediaType: self.tvRequestDataToDisplay.mediaType)
             } else {
-            DataManager.shared.saveTvShowsToWatchLater(originalLanguage: self.seriesData.originalLanguage,
-                                                       posterPath: self.seriesData.posterPath,
-                                                       voteCount: self.seriesData.voteCount,
-                                                       voteAverage: self.seriesData.voteAverage,
-                                                       overview: self.seriesData.overview,
-                                                       id: self.seriesData.id,
-                                                       originalName: self.seriesData.originalName,
-                                                       firstAirDate: self.seriesData.firstAirDate,
-                                                       name: self.seriesData.name,
-                                                       backdropPath: self.seriesData.backdropPath,
-                                                       popularity: self.seriesData.popularity,
-                                                       mediaType: self.seriesData.mediaType)
+                DataManager.shared.saveTvShowsToWatchLater(originalLanguage: self.seriesData.originalLanguage,
+                                                           posterPath: self.seriesData.posterPath,
+                                                           voteCount: self.seriesData.voteCount,
+                                                           voteAverage: self.seriesData.voteAverage,
+                                                           overview: self.seriesData.overview,
+                                                           id: self.seriesData.id,
+                                                           originalName: self.seriesData.originalName,
+                                                           firstAirDate: self.seriesData.firstAirDate,
+                                                           name: self.seriesData.name,
+                                                           backdropPath: self.seriesData.backdropPath,
+                                                           popularity: self.seriesData.popularity,
+                                                           mediaType: self.seriesData.mediaType)
             }
         }
     }

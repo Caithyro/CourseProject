@@ -26,7 +26,7 @@
                                     <constraint firstAttribute="height" constant="25" id="IEj-0d-Efp"/>
                                     <constraint firstAttribute="width" priority="999" constant="170" id="jy7-15-wmn"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="12"/>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" systemColor="secondarySystemFillColor"/>
@@ -38,26 +38,26 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Release date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fiu-4Z-K3C">
-                                <rect key="frame" x="130" y="304" width="48" height="8.5"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="7"/>
+                                <rect key="frame" x="128" y="304" width="50" height="11"/>
+                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="9"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OriginalLanguage" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z5C-q5-ik8">
-                                <rect key="frame" x="112" y="320.5" width="66" height="8.5"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="7"/>
+                                <rect key="frame" x="109" y="323" width="69" height="11"/>
+                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="9"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Rating" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mg4-uo-Dy7">
-                                <rect key="frame" x="8" y="304" width="24.5" height="8.5"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="7"/>
+                                <rect key="frame" x="8" y="304" width="25" height="11"/>
+                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="9"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TotalVotes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vq7-3o-LPz">
-                                <rect key="frame" x="8" y="320.5" width="40" height="8.5"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="7"/>
+                                <rect key="frame" x="8" y="323" width="42.5" height="11"/>
+                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="9"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
