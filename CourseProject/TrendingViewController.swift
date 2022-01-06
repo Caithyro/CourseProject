@@ -108,6 +108,7 @@ extension TrendingViewController: UICollectionViewDataSource, UISearchBarDelegat
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchPerformed = false
+        TrendingCollectionViewCell.shared.searchPerformed = false
         TrendingCollectionView.reloadData()
     }
     
