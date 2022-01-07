@@ -216,5 +216,17 @@ class DataManager {
             realm.delete(realm.objects(TvCastResultsToSave.self))
         }
     }
+    
+    func clearMovieTrailers() {
+        try! realm.write {
+            realm.delete(realm.objects(MovieTrailersRelultsToSave.self))
+        }
+    }
+    
+    func clearTvTrailers() {
+        try! realm.write {
+            realm.delete(realm.objects(TvTrailersRelultsToSave.self))
+        }
+    }
 }
 

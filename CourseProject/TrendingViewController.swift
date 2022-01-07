@@ -92,25 +92,7 @@ class TrendingViewController: UIViewController {
     }
 }
 
-extension TrendingViewController: UICollectionViewDataSource, UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            RequestManager.shared.movieSearchRequest(query: trendingSearchBar.text ?? "")
-            searchPerformed = true
-            TrendingCollectionViewCell.shared.searchPerformed = true
-        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
-            RequestManager.shared.tvSearchRequest(query: trendingSearchBar.text ?? "")
-            searchPerformed = true
-            TrendingCollectionViewCell.shared.searchPerformed = true
-        }
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchPerformed = false
-        TrendingCollectionViewCell.shared.searchPerformed = false
-        TrendingCollectionView.reloadData()
-    }
+extension TrendingViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -276,6 +258,41 @@ extension TrendingViewController: UICollectionViewDelegate {
                     detailsViewController.targetTvShow = tvDataToDisplay.id
                     detailsViewController.movieOrTvShow = 1
                 }
+            }
+        }
+    }
+}
+
+extension TrendingViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if trendingSegmentedControl.selectedSegmentIndex == 0 {
+            RequestManager.shared.movieSearchRequest(query: trendingSearchBar.text ?? "")
+            searchPerformed = true
+            TrendingCollectionViewCell.shared.searchPerformed = true
+        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+            RequestManager.shared.tvSearchRequest(query: trendingSearchBar.text ?? "")
+            searchPerformed = true
+            TrendingCollectionViewCell.shared.searchPerformed = true
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchPerformed = false
+        TrendingCollectionViewCell.shared.searchPerformed = false
+        TrendingCollectionView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { timer in
+            if self.trendingSegmentedControl.selectedSegmentIndex == 0 {
+                RequestManager.shared.movieSearchRequest(query: self.trendingSearchBar.text ?? "")
+                self.searchPerformed = true
+                TrendingCollectionViewCell.shared.searchPerformed = true
+            } else if self.trendingSegmentedControl.selectedSegmentIndex == 1 {
+                RequestManager.shared.tvSearchRequest(query: self.trendingSearchBar.text ?? "")
+                self.searchPerformed = true
+                TrendingCollectionViewCell.shared.searchPerformed = true
             }
         }
     }

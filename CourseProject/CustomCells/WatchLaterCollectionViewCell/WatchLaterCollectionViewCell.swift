@@ -67,7 +67,7 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
         let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
         
         self.watchLaterImageView.layer.cornerRadius = 15
-        self.watchLaterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: nil, context: [.imageTransformer: transformer])
+        self.watchLaterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.watchLaterTitleLabel.text = "\(dataToDisplay.title)"
         self.watchLaterRatingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.watchLaterTotalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
@@ -98,7 +98,7 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
         let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
         
         self.watchLaterImageView.layer.cornerRadius = 15
-        self.watchLaterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: nil, context: [.imageTransformer: transformer])
+        self.watchLaterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.watchLaterTitleLabel.text = "\(dataToDisplay.name)"
         self.watchLaterRatingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.watchLaterTotalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"

@@ -212,6 +212,8 @@ class RequestManager {
                 
                 indexForAppend = 0
                 
+                DataManager.shared.clearMovieTrailers()
+                
                 for _ in self.movieTrailersResponceData {
                     DataManager.shared.saveMovieTrailers(iso6391: self.movieTrailersResponceData[indexForAppend].iso6391 ?? "",
                                                          iso31661: self.movieTrailersResponceData[indexForAppend].iso31661 ?? "",
@@ -249,6 +251,8 @@ class RequestManager {
                 }
                 
                 indexForAppend = 0
+                
+                DataManager.shared.clearTvTrailers()
                 
                 for _ in self.tvTrailersResponceData {
                     DataManager.shared.saveTvTrailers(iso6391: self.tvTrailersResponceData[indexForAppend].iso6391 ?? "",

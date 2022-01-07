@@ -54,11 +54,11 @@ class DetailsViewController: UIViewController {
         
         self.detailsScrollView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.detailsMainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
-        self.detailsBackgroundImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(backgroundImageViewURL)"), placeholderImage: nil, context: [.imageTransformer: transformerForBackground])
+        self.detailsBackgroundImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(backgroundImageViewURL)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformerForBackground])
         blur(imageView: detailsBackgroundImageView)
         self.detailsTitleLabel.text = detailsTitle
         self.detailsPosterImageView.layer.cornerRadius = 25
-        self.detailsPosterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(detailsPosterURL)"), placeholderImage: nil, context: [.imageTransformer: transformerForPoster])
+        self.detailsPosterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(detailsPosterURL)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformerForPoster])
         self.detailsDescriptionLabel.text = detailsDescription
         self.detailsAverageVoteLabel.text = "Average rate - \(detailsAverageVote) in \(detailsVoteCount) votes"
         if detailsOriginalLanguage == "en" {
@@ -82,7 +82,6 @@ class DetailsViewController: UIViewController {
         }
         self.detailsCastCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.detailsPlayerView.load(withVideoId: videoId)
-        self.detailsPlayerView.layer.cornerRadius = 25
     }
     
     override func viewWillAppear(_ animated: Bool) {

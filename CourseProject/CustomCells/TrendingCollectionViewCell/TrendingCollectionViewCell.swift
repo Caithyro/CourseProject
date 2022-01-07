@@ -41,7 +41,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         animationView!.frame = saveButton.bounds
         animationView!.contentMode = .scaleAspectFit
         animationView!.loopMode = .playOnce
-        animationView!.animationSpeed = 1
+        animationView!.animationSpeed = 2
         saveButton.addSubview(animationView!)
         animationView!.play(completion: removeAnimation(animationCompleted:))
         
@@ -120,7 +120,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         
         self.titleLabel.text = dataToDisplay.title
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: nil, context: [.imageTransformer: transformer])
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.releaseDateLabel.text = "Release: \(dataToDisplay.releaseDate)"
         if dataToDisplay.originalLanguage == "en" {
@@ -153,7 +153,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         
         self.titleLabel.text = dataToDisplay.name
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: nil, context: [.imageTransformer: transformer])
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.releaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate)"
         if dataToDisplay.originalLanguage == "en" {
@@ -186,7 +186,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         
         self.titleLabel.text = dataToDisplay.title
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.posterPath ?? "")"), placeholderImage: nil, context: [.imageTransformer: transformer])
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.posterPath ?? "")"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage ?? 0.0)"
         self.releaseDateLabel.text = "Release: \(dataToDisplay.releaseDate ?? "")"
         if dataToDisplay.originalLanguage == "en" {
@@ -232,7 +232,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         
         self.titleLabel.text = dataToDisplay.name
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.posterPath ?? "")"), placeholderImage: nil, context: [.imageTransformer: transformer])
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.posterPath ?? "")"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage ?? 0.0)"
         self.releaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate ?? "")"
         if dataToDisplay.originalLanguage == "en" {

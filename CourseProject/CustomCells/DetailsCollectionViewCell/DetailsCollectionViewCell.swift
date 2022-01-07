@@ -25,7 +25,7 @@ class DetailsCollectionViewCell: UICollectionViewCell {
         
         self.detailsCollectionViewCellMainView.layer.backgroundColor = .init(genericCMYKCyan: 0.0, magenta: 0.0, yellow: 0, black: 0.0, alpha: 0)
         self.detailsCollectionViewCellMainView.layer.cornerRadius = 15
-        self.detailsCollectionViewCellCastImage.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.profilePath)"), placeholderImage: nil, context: [.imageTransformer: transformer])
+        self.detailsCollectionViewCellCastImage.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.profilePath)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.detailsCollectionViewCellCastImage.layer.cornerRadius = 15
         self.detailsCollectionViewCellCastName.text = "\(dataToDisplay.name)"
     }
