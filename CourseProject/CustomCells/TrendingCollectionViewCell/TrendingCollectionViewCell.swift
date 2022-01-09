@@ -20,6 +20,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     var movieRequestDataToDisplay = MoviesResultsToSave()
     var tvRequestDataToDisplay = TvResultsToSave()
     var searchPerformed: Bool = false
+    var movieOrTvShow: Int = 0
     
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -45,7 +46,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         saveButton.addSubview(animationView!)
         animationView!.play(completion: removeAnimation(animationCompleted:))
         
-        if DetailsViewController.shared.movieOrTvShow == 0 {
+        if TrendingCollectionViewCell.shared.movieOrTvShow == 0 {
             if TrendingCollectionViewCell.shared.searchPerformed == true {
                 DataManager.shared.saveMoviesToWatchLater(id: self.movieRequestDataToDisplay.id,
                                                           releaseDate: self.movieRequestDataToDisplay.releaseDate,

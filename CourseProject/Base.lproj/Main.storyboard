@@ -108,9 +108,9 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="SaveMessageTopConstraint" destination="bGE-HY-p2b" id="ho5-V3-MhS"/>
-                        <outlet property="TrendingCollectionView" destination="SKW-IB-bdW" id="dYo-zB-ol2"/>
                         <outlet property="saveMessageLabel" destination="OjA-LG-nAk" id="bf4-yy-Gfu"/>
                         <outlet property="saveMessageView" destination="aUd-y6-HdA" id="UOR-pC-qIP"/>
+                        <outlet property="trendingCollectionView" destination="SKW-IB-bdW" id="dYo-zB-ol2"/>
                         <outlet property="trendingSearchBar" destination="dzw-E3-i2e" id="ZIW-wN-G8L"/>
                         <outlet property="trendingSegmentedControl" destination="3X1-2z-Iyh" id="hOR-wP-v8d"/>
                     </connections>
@@ -272,7 +272,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4SM-NX-FmL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3654" y="70"/>
+            <point key="canvasLocation" x="3653.6231884057975" y="69.642857142857139"/>
         </scene>
         <!--Watch Later View Controller-->
         <scene sceneID="kmI-pM-4Go">

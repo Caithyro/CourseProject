@@ -64,26 +64,26 @@ class RequestManager {
                 }
                 indexForAppend = 0
                 trendingViewControllerInstance?.savedMoviesArray = DataManager.shared.getMovies()
-                trendingViewControllerInstance?.TrendingCollectionView.reloadData()
+                trendingViewControllerInstance?.trendingCollectionView.reloadData()
             } catch {
                 print(error)
                 trendingViewControllerInstance?.savedMoviesArray = DataManager.shared.getMovies()
-                trendingViewControllerInstance?.TrendingCollectionView.reloadData()
+                trendingViewControllerInstance?.trendingCollectionView.reloadData()
             }
         }
     }
     
     func requestTvShows() {
         
-        AF.request(tvRequestUrl).responseJSON { seriesResponceData1 in
+        AF.request(tvRequestUrl).responseJSON { tvResponceData1 in
             
             do {
                 
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let seriesResponseModel = try jsonDecoder.decode(TvResultsModel.self, from: seriesResponceData1.data!)
-                for _ in seriesResponseModel.results! {
-                    self.tvShowsResponceData.append(seriesResponseModel.results![indexForAppend])
+                let tvResponseModel = try jsonDecoder.decode(TvResultsModel.self, from: tvResponceData1.data!)
+                for _ in tvResponseModel.results! {
+                    self.tvShowsResponceData.append(tvResponseModel.results![indexForAppend])
                     indexForAppend += 1
                 }
                 
@@ -119,6 +119,7 @@ class RequestManager {
             
             do {
                 
+                movieCastResponceData.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
                 let movieCastResponseModel = try jsonDecoder.decode(MovieCastAndCrewResultsModel.self, from: movieCastResponceData1.data!)
@@ -161,6 +162,7 @@ class RequestManager {
             
             do {
                 
+                tvCastResponceData.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
                 let tvCastResponseModel = try jsonDecoder.decode(TvCastAndCrewResultsModel.self, from: tvCastResponceData1.data!)
@@ -202,6 +204,7 @@ class RequestManager {
             
             do {
                 
+                movieTrailersResponceData.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
                 let movieTrailersResponseModel = try jsonDecoder.decode(MovieTrailersRelultsModel.self, from: movieTrailersResponceData1.data!)
@@ -242,6 +245,7 @@ class RequestManager {
             
             do {
                 
+                tvTrailersResponceData.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
                 let tvTrailersResponseModel = try jsonDecoder.decode(TvTrailersRelultsModel.self, from: tvTrailersResponceData1.data!)
@@ -296,7 +300,7 @@ class RequestManager {
             } catch {
                 print(error)
             }
-            trendingViewControllerInstance?.TrendingCollectionView.reloadData()
+            trendingViewControllerInstance?.trendingCollectionView.reloadData()
         }
     }
     
@@ -320,7 +324,7 @@ class RequestManager {
             } catch {
                 print(error)
             }
-            trendingViewControllerInstance?.TrendingCollectionView.reloadData()
+            trendingViewControllerInstance?.trendingCollectionView.reloadData()
         }
     }
 }

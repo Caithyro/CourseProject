@@ -100,13 +100,13 @@ class DataManager {
         return moviesArray
     }
     
-    func getSeries() -> [TvResultsToSave] {
-        var seriesArray = [TvResultsToSave]()
-        let seriesResults = realm.objects(TvResultsToSave.self)
-        for eachTvShow in seriesResults {
-            seriesArray.append(eachTvShow)
+    func getTvShows() -> [TvResultsToSave] {
+        var tvArray = [TvResultsToSave]()
+        let tvResults = realm.objects(TvResultsToSave.self)
+        for eachTvShow in tvResults {
+            tvArray.append(eachTvShow)
         }
-        return seriesArray
+        return tvArray
     }
     
     func getMovieCast() -> [MovieCastResultsToSave] {

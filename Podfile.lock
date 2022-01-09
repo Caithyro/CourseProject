@@ -9,6 +9,7 @@ PODS:
   - SDWebImage (5.12.1):
     - SDWebImage/Core (= 5.12.1)
   - SDWebImage/Core (5.12.1)
+  - StatusAlert (1.1.1)
   - youtube-ios-player-helper (1.0.4)
 
 DEPENDENCIES:
@@ -16,6 +17,7 @@ DEPENDENCIES:
   - lottie-ios
   - RealmSwift
   - SDWebImage
+  - StatusAlert
   - youtube-ios-player-helper
 
 SPEC REPOS:
@@ -25,6 +27,7 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - SDWebImage
+    - StatusAlert
     - youtube-ios-player-helper
 
 SPEC CHECKSUMS:
@@ -33,8 +36,9 @@ SPEC CHECKSUMS:
   Realm: fac5ecd031fcb81171627b74944c885662d4b266
   RealmSwift: 9b02d25acb46a14756bde9893abb99e2e3675923
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
+  StatusAlert: a18ec3c33d36a06d4479c1f2b15ffac67aaf7ab1
   youtube-ios-player-helper: e9b97535e816db3152179d84d999bc1807ecd689
 
-PODFILE CHECKSUM: 97b6019ba5cf0949fc3a389847bf970e8724470b
+PODFILE CHECKSUM: 91fbff1e7ae5128b73021067841c87301fed673c
 
 COCOAPODS: 1.11.2

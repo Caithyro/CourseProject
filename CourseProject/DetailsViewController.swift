@@ -44,6 +44,7 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var detailsLanguageLabel: UILabel!
     @IBOutlet weak var detailsCastCollectionView: UICollectionView!
     @IBOutlet weak var detailsPlayerView: YTPlayerView!
+    @IBOutlet weak var videoNotFoundLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +82,7 @@ class DetailsViewController: UIViewController {
             detailsLanguageLabel.text = detailsOriginalLanguage
         }
         self.detailsCastCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
-        self.detailsPlayerView.load(withVideoId: videoId)
+            self.detailsPlayerView.load(withVideoId: videoId)
     }
     
     override func viewWillAppear(_ animated: Bool) {

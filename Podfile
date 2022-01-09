@@ -6,5 +6,6 @@ target 'CourseProject' do
   pod 'RealmSwift'
   pod 'lottie-ios'
   pod 'youtube-ios-player-helper'
+  pod 'StatusAlert'
 
 end
