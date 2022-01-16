@@ -3,6 +3,7 @@ import Foundation
 import RealmSwift
 
 struct TvTrailersRelults: Codable {
+    
     let iso6391 : String?
     let iso31661 : String?
     let name : String?
@@ -29,6 +30,7 @@ struct TvTrailersRelults: Codable {
     }
     
     init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         iso6391 = try values.decodeIfPresent(String.self, forKey: .iso6391)
         iso31661 = try values.decodeIfPresent(String.self, forKey: .iso31661)

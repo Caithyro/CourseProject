@@ -19,29 +19,24 @@ class WatchLaterViewController: UIViewController {
     @IBOutlet weak var watchLaterSegmentedControl: UISegmentedControl!
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-        
         DataManager.shared.watchLaterViewControllerInstance = self
-        
-        watchLaterSegmentedControl.selectedSegmentIndex = 0
-        watchLaterCollectionView.register(UINib(nibName: "WatchLaterCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "WatchLaterCollectionViewCell")
-        
-        self.title = "Watch Later"
-        
-        self.watchLaterCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
+        doStartupPrepararions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         super.viewWillAppear(animated)
         self.savedMoviesData = DataManager.shared.getMoviesWatchLaterList()
         self.savedSeriesData = DataManager.shared.getTvWatchLaterList()
         self.watchLaterCollectionView.reloadData()
-        
         self.tabBarController?.tabBar.layer.isHidden = false
         self.navigationController?.navigationBar.isHidden = false
     }
     
     @IBAction func watchLaterSegmentedControlSwitched(_ sender: Any) {
+        
         if watchLaterSegmentedControl.selectedSegmentIndex == 0 {
             self.savedMoviesData = DataManager.shared.getMoviesWatchLaterList()
             self.watchLaterCollectionView.reloadData()
@@ -53,9 +48,22 @@ class WatchLaterViewController: UIViewController {
         }
     }
     
+    // MARK: - Private    
+    
+    private func doStartupPrepararions() {
+        
+        watchLaterSegmentedControl.selectedSegmentIndex = 0
+        watchLaterCollectionView.register(UINib(nibName: "WatchLaterCollectionViewCell", bundle: nil),
+                                          forCellWithReuseIdentifier: "WatchLaterCollectionViewCell")
+        self.title = WatchLaterConstants.titleString
+        self.watchLaterCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
+    }
 }
 
+// MARK: - Extensions
+
 extension WatchLaterViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if watchLaterSegmentedControl.selectedSegmentIndex == 0 {
@@ -69,7 +77,8 @@ extension WatchLaterViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let watchLaterCell = watchLaterCollectionView.dequeueReusableCell(withReuseIdentifier: "WatchLaterCollectionViewCell", for: indexPath) as? WatchLaterCollectionViewCell else { return UICollectionViewCell() }
+        guard let watchLaterCell = watchLaterCollectionView.dequeueReusableCell(withReuseIdentifier: "WatchLaterCollectionViewCell",
+                                                                                for: indexPath) as? WatchLaterCollectionViewCell else { return UICollectionViewCell() }
         
         var moviesDataToDisplay = MoviesResultsToSaveToWatchLater()
         var seriesDataToDisplay = TvResultsToSaveToWatchLater()
@@ -96,7 +105,8 @@ extension WatchLaterViewController: UICollectionViewDelegate {
         if watchLaterSegmentedControl.selectedSegmentIndex == 0 {
             movieDataToDisplay = savedMoviesData[indexPath.row]
             let main = UIStoryboard(name: "Main", bundle: nil)
-            if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+            if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController")
+                as? DetailsViewController {
                 navigationController?.pushViewController(detailsViewController, animated: true)
                 RequestManager.shared.requestMovieCast(targetMovieId: movieDataToDisplay.id)
                 RequestManager.shared.requestMovieTrailers(targetMovie: movieDataToDisplay.id)
@@ -113,7 +123,8 @@ extension WatchLaterViewController: UICollectionViewDelegate {
         } else if watchLaterSegmentedControl.selectedSegmentIndex == 1 {
             tvDataToDisplay = savedSeriesData[indexPath.row]
             let main = UIStoryboard(name: "Main", bundle: nil)
-            if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+            if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController")
+                as? DetailsViewController {
                 navigationController?.pushViewController(detailsViewController, animated: true)
                 RequestManager.shared.requestTvCast(targetShowId: tvDataToDisplay.id)
                 RequestManager.shared.requestTvTrailers(targetShow: tvDataToDisplay.id)
@@ -129,4 +140,9 @@ extension WatchLaterViewController: UICollectionViewDelegate {
             }
         }
     }
+}
+
+struct WatchLaterConstants {
+    
+    static let titleString = "Watch later"
 }

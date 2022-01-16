@@ -3,6 +3,7 @@ import Foundation
 import RealmSwift
 
 struct MoviesResults: Codable {
+    
     let id : Int?
     let releaseDate : String?
     let adult : Bool?
@@ -39,6 +40,7 @@ struct MoviesResults: Codable {
     }
     
     init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decodeIfPresent(Int.self, forKey: .id)
         releaseDate = try values.decodeIfPresent(String.self, forKey: .releaseDate)

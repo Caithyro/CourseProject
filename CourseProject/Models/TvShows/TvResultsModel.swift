@@ -2,6 +2,7 @@
 import Foundation
 
 struct TvResultsModel: Codable {
+    
     let page : Int?
     let results : [TvResults]?
     let totalPages : Int?
@@ -16,6 +17,7 @@ struct TvResultsModel: Codable {
     }
     
     init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         page = try values.decodeIfPresent(Int.self, forKey: .page)
         results = try values.decodeIfPresent([TvResults].self, forKey: .results)

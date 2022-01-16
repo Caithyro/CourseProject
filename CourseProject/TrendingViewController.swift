@@ -25,6 +25,7 @@ class TrendingViewController: UIViewController {
     var searchPerformed: Bool = false
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         RequestManager.shared.trendingViewControllerInstance = self
@@ -33,68 +34,80 @@ class TrendingViewController: UIViewController {
         TrendingCollectionViewCell.shared.trendingViewControllerInstance = self
         DataManager.shared.trendingViewControllerInstance = self
         
-        trendingSegmentedControl.selectedSegmentIndex = 0
-        TrendingCollectionViewCell.shared.movieOrTvShow = 0
-        trendingSearchBar.showsCancelButton = true
-        
-        if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            RequestManager.shared.requestMovies()
-            self.savedMoviesArray = DataManager.shared.getMovies()
-            RequestManager.shared.requestTvShows()
-            self.savedSeriesArray = DataManager.shared.getTvShows()
-            self.trendingCollectionView.reloadData()
-        }
-        
-        self.trendingCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
-        self.trendingCollectionView.register(UINib(nibName: "TrendingCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "TrendingCollectionViewCell")
-        self.title = "Trending for today"
+        doStartupPreparations()
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.layer.isHidden = false
         self.navigationController?.navigationBar.isHidden = false
     }
     
-    func saveSuccessfull() {
+    func displaySaveSuccessfullMessage() {
+        
         let statusAlert = StatusAlert()
+        
         statusAlert.appearance.backgroundColor = UIColor.systemGray2
         statusAlert.appearance.blurStyle = .regular
         statusAlert.alertShowingDuration = 1
         statusAlert.image = UIImage(systemName: "heart.fill")
-        statusAlert.title = "Saved succesfully"
+        statusAlert.title = TrendingConstants.saveSuccessString
         statusAlert.message = ""
         statusAlert.canBePickedOrDismissed = true
         statusAlert.showInKeyWindow()
     }
     
-    func saveFailed() {
+    func displaySaveFailedMessage() {
+        
         let statusAlert = StatusAlert()
+        
         statusAlert.appearance.backgroundColor = UIColor.systemGray2
         statusAlert.appearance.blurStyle = .regular
         statusAlert.alertShowingDuration = 1
         statusAlert.image = UIImage(systemName: "heart.slash.fill")
-        statusAlert.title = "Save failed"
+        statusAlert.title = TrendingConstants.saveFailString
         statusAlert.message = ""
         statusAlert.canBePickedOrDismissed = true
         statusAlert.showInKeyWindow()
     }
     
     @IBAction func trendingSegmentedControlSwitched(_ sender: Any) {
+        
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            self.savedMoviesArray = DataManager.shared.getMovies()
+            self.savedMoviesArray = DataManager.shared.getMoviesFromRealm()
             self.trendingCollectionView.reloadData()
             DetailsViewController.shared.movieOrTvShow = 0
             TrendingCollectionViewCell.shared.movieOrTvShow = 0
         } else {
-            self.savedSeriesArray = DataManager.shared.getTvShows()
+            self.savedSeriesArray = DataManager.shared.getTvShowsFromRealm()
             self.trendingCollectionView.reloadData()
             DetailsViewController.shared.movieOrTvShow = 1
             TrendingCollectionViewCell.shared.movieOrTvShow = 1
         }
     }
+    
+    // MARK: - Private
+    
+    private func doStartupPreparations() {
+        
+        self.trendingCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
+        self.trendingCollectionView.register(UINib(nibName: "TrendingCollectionViewCell",
+                                                   bundle: nil), forCellWithReuseIdentifier: "TrendingCollectionViewCell")
+        trendingSegmentedControl.selectedSegmentIndex = 0
+        TrendingCollectionViewCell.shared.movieOrTvShow = 0
+        trendingSearchBar.showsCancelButton = false
+        self.title = TrendingConstants.titleString
+        RequestManager.shared.requestMovies()
+        self.savedMoviesArray = DataManager.shared.getMoviesFromRealm()
+        RequestManager.shared.requestTvShows()
+        self.savedSeriesArray = DataManager.shared.getTvShowsFromRealm()
+        self.trendingCollectionView.reloadData()
+    }
 }
+
+// MARK: - Extensions
 
 extension TrendingViewController: UICollectionViewDataSource {
     
@@ -121,19 +134,19 @@ extension TrendingViewController: UICollectionViewDataSource {
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
             if searchPerformed == true {
-                guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
+                guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell",
+                                                                                    for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
                 
                 var moviesDataToDisplay = RequestManager.shared.movieSearchResponceData
-                var eachSearchedMovie = moviesDataToDisplay[indexPath.row]
+                let eachSearchedMovie = moviesDataToDisplay[indexPath.row]
                 trendingCell.configureMoviesSearchCell(dataToDisplay: eachSearchedMovie)
                 for _ in moviesDataToDisplay {
                     moviesDataToDisplay.remove(at: 0)
                 }
-                
                 return trendingCell
-                
             } else {
-                guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
+                guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell",
+                                                                                    for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
                 
                 var movieDataToDisplay = MoviesResultsToSave()
                 var tvDataToDisplay = TvResultsToSave()
@@ -142,19 +155,19 @@ extension TrendingViewController: UICollectionViewDataSource {
                     movieDataToDisplay = savedMoviesArray[indexPath.row]
                     TrendingCollectionViewCell.shared.moviesData = movieDataToDisplay
                     trendingCell.configureMoviesCell(dataToDisplay: movieDataToDisplay)
-                } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+                } else {
                     tvDataToDisplay = savedSeriesArray[indexPath.row]
                     trendingCell.configureSeriesCell(dataToDisplay: tvDataToDisplay)
                 }
-                
                 return trendingCell
             }
         } else {
             if searchPerformed == true {
-                guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
+                guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell",
+                                                                                    for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
                 
                 var tvDataToDisplay = RequestManager.shared.tvSearchResponceData
-                var eachSearchedTvShow = tvDataToDisplay[indexPath.row]
+                let eachSearchedTvShow = tvDataToDisplay[indexPath.row]
                 trendingCell.configureSeriesSearchCell(dataToDisplay: eachSearchedTvShow)
                 for _ in tvDataToDisplay {
                     tvDataToDisplay.remove(at: 0)
@@ -163,7 +176,8 @@ extension TrendingViewController: UICollectionViewDataSource {
                 return trendingCell
                 
             } else {
-                guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell", for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
+                guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCollectionViewCell",
+                                                                                    for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
                 
                 var movieDataToDisplay = MoviesResultsToSave()
                 var tvDataToDisplay = TvResultsToSave()
@@ -172,11 +186,10 @@ extension TrendingViewController: UICollectionViewDataSource {
                     movieDataToDisplay = savedMoviesArray[indexPath.row]
                     TrendingCollectionViewCell.shared.moviesData = movieDataToDisplay
                     trendingCell.configureMoviesCell(dataToDisplay: movieDataToDisplay)
-                } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+                } else {
                     tvDataToDisplay = savedSeriesArray[indexPath.row]
                     trendingCell.configureSeriesCell(dataToDisplay: tvDataToDisplay)
                 }
-                
                 return trendingCell
             }
         }
@@ -190,11 +203,13 @@ extension TrendingViewController: UICollectionViewDelegate {
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
             var movieDataToDisplay = MoviesResultsToSave()
             movieDataToDisplay = savedMoviesArray[indexPath.row]
+            
             if searchPerformed == true {
-                var movieRequestDataToDisplay = RequestManager.shared.movieSearchResponceData
-                var eachSearchedMovie = movieRequestDataToDisplay[indexPath.row]
+                let movieRequestDataToDisplay = RequestManager.shared.movieSearchResponceData
+                let eachSearchedMovie = movieRequestDataToDisplay[indexPath.row]
                 let main = UIStoryboard(name: "Main", bundle: nil)
-                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController")
+                    as? DetailsViewController {
                     navigationController?.pushViewController(detailsViewController, animated: true)
                     RequestManager.shared.requestMovieCast(targetMovieId: eachSearchedMovie.id ?? 0)
                     RequestManager.shared.requestMovieTrailers(targetMovie: eachSearchedMovie.id ?? 0)
@@ -210,7 +225,8 @@ extension TrendingViewController: UICollectionViewDelegate {
                 }
             } else {
                 let main = UIStoryboard(name: "Main", bundle: nil)
-                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController")
+                    as? DetailsViewController {
                     navigationController?.pushViewController(detailsViewController, animated: true)
                     RequestManager.shared.requestMovieCast(targetMovieId: movieDataToDisplay.id)
                     RequestManager.shared.requestMovieTrailers(targetMovie: movieDataToDisplay.id)
@@ -225,14 +241,15 @@ extension TrendingViewController: UICollectionViewDelegate {
                     detailsViewController.movieOrTvShow = 0
                 }
             }
-        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+        } else {
             var tvDataToDisplay = TvResultsToSave()
             tvDataToDisplay = savedSeriesArray[indexPath.row]
             if searchPerformed == true {
-                var tvRequestDataToDisplay = RequestManager.shared.tvSearchResponceData
-                var eachSearchedTvShow = tvRequestDataToDisplay[indexPath.row]
+                let tvRequestDataToDisplay = RequestManager.shared.tvSearchResponceData
+                let eachSearchedTvShow = tvRequestDataToDisplay[indexPath.row]
                 let main = UIStoryboard(name: "Main", bundle: nil)
-                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController")
+                    as? DetailsViewController {
                     navigationController?.pushViewController(detailsViewController, animated: true)
                     RequestManager.shared.requestTvCast(targetShowId: eachSearchedTvShow.id ?? 0)
                     RequestManager.shared.requestTvTrailers(targetShow: eachSearchedTvShow.id ?? 0)
@@ -248,7 +265,8 @@ extension TrendingViewController: UICollectionViewDelegate {
                 }
             } else {
                 let main = UIStoryboard(name: "Main", bundle: nil)
-                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController") as? DetailsViewController {
+                if let detailsViewController = main.instantiateViewController(withIdentifier: "DetailsViewController")
+                    as? DetailsViewController {
                     navigationController?.pushViewController(detailsViewController, animated: true)
                     RequestManager.shared.requestTvCast(targetShowId: tvDataToDisplay.id)
                     RequestManager.shared.requestTvTrailers(targetShow: tvDataToDisplay.id)
@@ -269,37 +287,57 @@ extension TrendingViewController: UICollectionViewDelegate {
 
 extension TrendingViewController: UISearchBarDelegate {
     
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
             RequestManager.shared.movieSearchRequest(query: trendingSearchBar.text ?? "")
             searchPerformed = true
             TrendingCollectionViewCell.shared.searchPerformed = true
-        } else if trendingSegmentedControl.selectedSegmentIndex == 1 {
+            searchBar.endEditing(true)
+            searchBar.showsCancelButton = false
+        } else {
             RequestManager.shared.tvSearchRequest(query: trendingSearchBar.text ?? "")
             searchPerformed = true
             TrendingCollectionViewCell.shared.searchPerformed = true
+            searchBar.endEditing(true)
+            searchBar.showsCancelButton = false
         }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
         searchPerformed = false
         searchBar.endEditing(true)
+        searchBar.showsCancelButton = false
         searchBar.text = ""
         TrendingCollectionViewCell.shared.searchPerformed = false
         trendingCollectionView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { timer in
+            
             if self.trendingSegmentedControl.selectedSegmentIndex == 0 {
                 RequestManager.shared.movieSearchRequest(query: self.trendingSearchBar.text ?? "")
                 self.searchPerformed = true
                 TrendingCollectionViewCell.shared.searchPerformed = true
-            } else if self.trendingSegmentedControl.selectedSegmentIndex == 1 {
+            } else {
                 RequestManager.shared.tvSearchRequest(query: self.trendingSearchBar.text ?? "")
                 self.searchPerformed = true
                 TrendingCollectionViewCell.shared.searchPerformed = true
             }
         }
     }
+}
+
+struct TrendingConstants {
+    
+    static let saveSuccessString = "Saved succesfully"
+    static let saveFailString = "Save failed"
+    static let titleString = "Trending for today"
 }

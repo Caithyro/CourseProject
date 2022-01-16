@@ -222,8 +222,8 @@
 		668F11E32775CC3100F7D968 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				66F5E91827737A9B002F8EC1 /* DataManager.swift */,
 				668F11E12775CC2800F7D968 /* RequestManager.swift */,
+				66F5E91827737A9B002F8EC1 /* DataManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";

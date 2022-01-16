@@ -3,6 +3,7 @@ import Foundation
 import RealmSwift
 
 struct TvResults: Codable {
+    
     let genreIds : [Int]?
     let originalLanguage : String?
     let posterPath : String?
@@ -37,6 +38,7 @@ struct TvResults: Codable {
     }
     
     init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         genreIds = try values.decodeIfPresent([Int].self, forKey: .genreIds)
         originalLanguage = try values.decodeIfPresent(String.self, forKey: .originalLanguage)

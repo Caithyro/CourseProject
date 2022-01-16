@@ -3,6 +3,7 @@ import Foundation
 import RealmSwift
 
 struct TvSearchResults: Codable {
+    
     let backdropPath: String?
     let firstAirDate: String?
     let genreIds: [Int]?
@@ -35,6 +36,7 @@ struct TvSearchResults: Codable {
     }
     
     init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         backdropPath = try values.decodeIfPresent(String.self, forKey: .backdropPath)
         firstAirDate = try values.decodeIfPresent(String.self, forKey: .firstAirDate)

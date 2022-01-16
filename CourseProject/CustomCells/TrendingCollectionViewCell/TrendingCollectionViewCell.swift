@@ -17,10 +17,13 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     
     var moviesData = MoviesResultsToSave()
     var seriesData = TvResultsToSave()
-    var movieRequestDataToDisplay = MoviesResultsToSave()
-    var tvRequestDataToDisplay = TvResultsToSave()
     var searchPerformed: Bool = false
     var movieOrTvShow: Int = 0
+    
+    private var movieRequestDataToDisplay = MoviesResultsToSave()
+    private var tvRequestDataToDisplay = TvResultsToSave()
+    private var saveAnimationView: AnimationView?
+    private let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
     
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -30,7 +33,6 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var originalLanguageLabel: UILabel!
     @IBOutlet weak var totalVotesLabel: UILabel!
     @IBOutlet weak var saveButton: UIButton!
-    private var animationView: AnimationView?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,90 +40,29 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     
     @IBAction func saveToWatchLaterButtonPressed(_ sender: Any) {
         
-        animationView = .init(name: "heartAnimation")
-        animationView!.frame = saveButton.bounds
-        animationView!.contentMode = .scaleAspectFit
-        animationView!.loopMode = .playOnce
-        animationView!.animationSpeed = 2
-        saveButton.addSubview(animationView!)
-        animationView!.play(completion: removeAnimation(animationCompleted:))
-        
+        runSaveAnimation()
         if TrendingCollectionViewCell.shared.movieOrTvShow == 0 {
             if TrendingCollectionViewCell.shared.searchPerformed == true {
-                DataManager.shared.saveMoviesToWatchLater(id: self.movieRequestDataToDisplay.id,
-                                                          releaseDate: self.movieRequestDataToDisplay.releaseDate,
-                                                          adult: self.movieRequestDataToDisplay.adult,
-                                                          backdropPath: self.movieRequestDataToDisplay.backdropPath,
-                                                          voteCount: self.movieRequestDataToDisplay.voteCount,
-                                                          overview: self.movieRequestDataToDisplay.overview,
-                                                          originalLanguage: self.movieRequestDataToDisplay.originalLanguage,
-                                                          originalTitle: self.movieRequestDataToDisplay.originalTitle,
-                                                          posterPath: self.movieRequestDataToDisplay.posterPath,
-                                                          title: self.movieRequestDataToDisplay.title,
-                                                          video: self.movieRequestDataToDisplay.video,
-                                                          voteAverage: self.movieRequestDataToDisplay.voteAverage,
-                                                          popularity: self.movieRequestDataToDisplay.popularity,
-                                                          mediaType: self.movieRequestDataToDisplay.mediaType)
+                saveMovieFromRequestToWatchLater()
             } else {
-                DataManager.shared.saveMoviesToWatchLater(id: self.moviesData.id,
-                                                          releaseDate: self.moviesData.releaseDate,
-                                                          adult: self.moviesData.adult,
-                                                          backdropPath: self.moviesData.backdropPath,
-                                                          voteCount: self.moviesData.voteCount,
-                                                          overview: self.moviesData.overview,
-                                                          originalLanguage: self.moviesData.originalLanguage,
-                                                          originalTitle: self.moviesData.originalTitle,
-                                                          posterPath: self.moviesData.posterPath,
-                                                          title: self.moviesData.title,
-                                                          video: self.moviesData.video,
-                                                          voteAverage: self.moviesData.voteAverage,
-                                                          popularity: self.moviesData.popularity,
-                                                          mediaType: self.moviesData.mediaType)
+                saveMovieFromTrendingToWatchLater()
             }
         } else {
             if TrendingCollectionViewCell.shared.searchPerformed == true {
-                DataManager.shared.saveTvShowsToWatchLater(originalLanguage: self.tvRequestDataToDisplay.originalLanguage,
-                                                           posterPath: self.tvRequestDataToDisplay.posterPath,
-                                                           voteCount: self.tvRequestDataToDisplay.voteCount,
-                                                           voteAverage: self.tvRequestDataToDisplay.voteAverage,
-                                                           overview: self.tvRequestDataToDisplay.overview,
-                                                           id: self.tvRequestDataToDisplay.id,
-                                                           originalName: self.tvRequestDataToDisplay.originalName,
-                                                           firstAirDate: self.tvRequestDataToDisplay.firstAirDate,
-                                                           name: self.tvRequestDataToDisplay.name,
-                                                           backdropPath: self.tvRequestDataToDisplay.backdropPath,
-                                                           popularity: self.tvRequestDataToDisplay.popularity,
-                                                           mediaType: self.tvRequestDataToDisplay.mediaType)
+                saveTvShowFromRequestToWatchLater()
             } else {
-                DataManager.shared.saveTvShowsToWatchLater(originalLanguage: self.seriesData.originalLanguage,
-                                                           posterPath: self.seriesData.posterPath,
-                                                           voteCount: self.seriesData.voteCount,
-                                                           voteAverage: self.seriesData.voteAverage,
-                                                           overview: self.seriesData.overview,
-                                                           id: self.seriesData.id,
-                                                           originalName: self.seriesData.originalName,
-                                                           firstAirDate: self.seriesData.firstAirDate,
-                                                           name: self.seriesData.name,
-                                                           backdropPath: self.seriesData.backdropPath,
-                                                           popularity: self.seriesData.popularity,
-                                                           mediaType: self.seriesData.mediaType)
+                saveTvShowFromTrendingToWatchLater()
             }
         }
     }
     
-    func removeAnimation(animationCompleted: Bool) {
-        if animationCompleted == true {
-            animationView!.removeFromSuperview()
-        }
-    }
     
     func configureMoviesCell(dataToDisplay: MoviesResultsToSave) {
         
-        let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
-        
         self.titleLabel.text = dataToDisplay.title
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"),
+                                         placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.releaseDateLabel.text = "Release: \(dataToDisplay.releaseDate)"
         if dataToDisplay.originalLanguage == "en" {
@@ -150,11 +91,11 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     }
     
     func configureSeriesCell(dataToDisplay: TvResultsToSave) {
-        let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
         
         self.titleLabel.text = dataToDisplay.name
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"),
+                                         placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.releaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate)"
         if dataToDisplay.originalLanguage == "en" {
@@ -183,11 +124,10 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     
     func configureMoviesSearchCell(dataToDisplay: MovieSearchResults) {
         
-        let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
-        
         self.titleLabel.text = dataToDisplay.title
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.posterPath ?? "")"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.posterPath ?? "")"),
+                                         placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage ?? 0.0)"
         self.releaseDateLabel.text = "Release: \(dataToDisplay.releaseDate ?? "")"
         if dataToDisplay.originalLanguage == "en" {
@@ -229,11 +169,10 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     
     func configureSeriesSearchCell(dataToDisplay: TvSearchResults) {
         
-        let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
-        
         self.titleLabel.text = dataToDisplay.name
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.posterPath ?? "")"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
+        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.posterPath ?? "")"),
+                                         placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage ?? 0.0)"
         self.releaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate ?? "")"
         if dataToDisplay.originalLanguage == "en" {
@@ -269,5 +208,95 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         self.tvRequestDataToDisplay.backdropPath = dataToDisplay.backdropPath ?? ""
         self.tvRequestDataToDisplay.firstAirDate = dataToDisplay.firstAirDate ?? ""
         self.tvRequestDataToDisplay.mediaType = "tv"
+    }
+    
+    // MARK: - Private
+    
+    private func removeSaveAnimationView(animationCompleted: Bool) {
+        
+        if animationCompleted == true {
+            saveAnimationView?.removeFromSuperview()
+        }
+    }
+    
+    private func runSaveAnimation() {
+        
+        saveAnimationView = .init(name: "heartAnimation")
+        if saveAnimationView != nil {
+            saveAnimationView!.frame = saveButton.bounds
+            saveAnimationView!.contentMode = .scaleAspectFit
+            saveAnimationView!.loopMode = .playOnce
+            saveAnimationView!.animationSpeed = 2
+            saveButton.addSubview(saveAnimationView!)
+            saveAnimationView!.play(completion: removeSaveAnimationView(animationCompleted:))
+        }
+    }
+    
+    private func saveMovieFromRequestToWatchLater() {
+        
+        DataManager.shared.saveMoviesToWatchLater(id: self.movieRequestDataToDisplay.id,
+                                                  releaseDate: self.movieRequestDataToDisplay.releaseDate,
+                                                  adult: self.movieRequestDataToDisplay.adult,
+                                                  backdropPath: self.movieRequestDataToDisplay.backdropPath,
+                                                  voteCount: self.movieRequestDataToDisplay.voteCount,
+                                                  overview: self.movieRequestDataToDisplay.overview,
+                                                  originalLanguage: self.movieRequestDataToDisplay.originalLanguage,
+                                                  originalTitle: self.movieRequestDataToDisplay.originalTitle,
+                                                  posterPath: self.movieRequestDataToDisplay.posterPath,
+                                                  title: self.movieRequestDataToDisplay.title,
+                                                  video: self.movieRequestDataToDisplay.video,
+                                                  voteAverage: self.movieRequestDataToDisplay.voteAverage,
+                                                  popularity: self.movieRequestDataToDisplay.popularity,
+                                                  mediaType: self.movieRequestDataToDisplay.mediaType)
+    }
+    
+    private func saveMovieFromTrendingToWatchLater() {
+        
+        DataManager.shared.saveMoviesToWatchLater(id: self.moviesData.id,
+                                                  releaseDate: self.moviesData.releaseDate,
+                                                  adult: self.moviesData.adult,
+                                                  backdropPath: self.moviesData.backdropPath,
+                                                  voteCount: self.moviesData.voteCount,
+                                                  overview: self.moviesData.overview,
+                                                  originalLanguage: self.moviesData.originalLanguage,
+                                                  originalTitle: self.moviesData.originalTitle,
+                                                  posterPath: self.moviesData.posterPath,
+                                                  title: self.moviesData.title,
+                                                  video: self.moviesData.video,
+                                                  voteAverage: self.moviesData.voteAverage,
+                                                  popularity: self.moviesData.popularity,
+                                                  mediaType: self.moviesData.mediaType)
+    }
+    
+    private func saveTvShowFromRequestToWatchLater() {
+        
+        DataManager.shared.saveTvShowsToWatchLater(originalLanguage: self.tvRequestDataToDisplay.originalLanguage,
+                                                   posterPath: self.tvRequestDataToDisplay.posterPath,
+                                                   voteCount: self.tvRequestDataToDisplay.voteCount,
+                                                   voteAverage: self.tvRequestDataToDisplay.voteAverage,
+                                                   overview: self.tvRequestDataToDisplay.overview,
+                                                   id: self.tvRequestDataToDisplay.id,
+                                                   originalName: self.tvRequestDataToDisplay.originalName,
+                                                   firstAirDate: self.tvRequestDataToDisplay.firstAirDate,
+                                                   name: self.tvRequestDataToDisplay.name,
+                                                   backdropPath: self.tvRequestDataToDisplay.backdropPath,
+                                                   popularity: self.tvRequestDataToDisplay.popularity,
+                                                   mediaType: self.tvRequestDataToDisplay.mediaType)
+    }
+    
+    private func saveTvShowFromTrendingToWatchLater() {
+        
+        DataManager.shared.saveTvShowsToWatchLater(originalLanguage: self.seriesData.originalLanguage,
+                                                   posterPath: self.seriesData.posterPath,
+                                                   voteCount: self.seriesData.voteCount,
+                                                   voteAverage: self.seriesData.voteAverage,
+                                                   overview: self.seriesData.overview,
+                                                   id: self.seriesData.id,
+                                                   originalName: self.seriesData.originalName,
+                                                   firstAirDate: self.seriesData.firstAirDate,
+                                                   name: self.seriesData.name,
+                                                   backdropPath: self.seriesData.backdropPath,
+                                                   popularity: self.seriesData.popularity,
+                                                   mediaType: self.seriesData.mediaType)
     }
 }

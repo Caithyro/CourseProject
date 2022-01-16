@@ -3,6 +3,7 @@ import Foundation
 import RealmSwift
 
 struct MovieSearchResults: Codable {
+    
     let adult: Bool?
     let backdropPath: String?
     let genreIds: [Int]?
@@ -37,6 +38,7 @@ struct MovieSearchResults: Codable {
     }
     
     init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         adult = try values.decodeIfPresent(Bool.self, forKey: .adult)
         backdropPath = try values.decodeIfPresent(String.self, forKey: .backdropPath)

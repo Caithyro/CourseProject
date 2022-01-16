@@ -2,6 +2,7 @@
 import Foundation
 
 struct MovieCrewResults: Codable {
+    
     let adult : Bool?
     let gender : Int?
     let id : Int?
@@ -30,6 +31,7 @@ struct MovieCrewResults: Codable {
     }
     
     init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         adult = try values.decodeIfPresent(Bool.self, forKey: .adult)
         gender = try values.decodeIfPresent(Int.self, forKey: .gender)

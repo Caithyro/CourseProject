@@ -135,7 +135,7 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qDz-zd-zDU">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1266"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="1132.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lTb-kn-WYv">
                                                 <rect key="frame" x="57" y="104" width="300" height="450"/>
@@ -152,23 +152,23 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="100" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mPI-hA-HMd">
-                                                <rect key="frame" x="8" y="562" width="398" height="150"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mPI-hA-HMd">
+                                                <rect key="frame" x="8" y="562" width="398" height="16.5"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="150" id="gtO-n1-Qff"/>
+                                                    <constraint firstAttribute="height" priority="750" constant="200" id="gtO-n1-Qff"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OriginalLanguage" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gbF-jI-C9g">
-                                                <rect key="frame" x="323" y="998" width="83" height="14"/>
+                                                <rect key="frame" x="323" y="864.5" width="83" height="14"/>
                                                 <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="12"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="r0c-n1-8u9">
-                                                <rect key="frame" x="8" y="720" width="398" height="270"/>
+                                                <rect key="frame" x="8" y="586.5" width="398" height="270"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="270" id="uFA-sC-7Xb"/>
@@ -196,7 +196,7 @@
                                                 </connections>
                                             </collectionView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VoteAVG in VoteCount" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cgF-Tk-o5o">
-                                                <rect key="frame" x="8" y="998" width="112.5" height="12"/>
+                                                <rect key="frame" x="8" y="864.5" width="112.5" height="12"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="12" id="AxF-pg-bHZ"/>
                                                 </constraints>
@@ -205,7 +205,7 @@
                                                 <color key="highlightedColor" systemColor="labelColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Dj-xg-bKI" customClass="YTPlayerView">
-                                                <rect key="frame" x="0.0" y="1026" width="414" height="232"/>
+                                                <rect key="frame" x="0.0" y="892.5" width="414" height="232"/>
                                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" priority="999" constant="414" id="4Z2-lw-OXc"/>

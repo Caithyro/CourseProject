@@ -2,6 +2,7 @@
 import Foundation
 
 struct MovieCastAndCrewResultsModel: Codable {
+    
     let id : Int?
     let movieCast : [MovieCastResults]?
     let movieCrew : [MovieCrewResults]?
@@ -14,6 +15,7 @@ struct MovieCastAndCrewResultsModel: Codable {
     }
     
     init(from decoder: Decoder) throws {
+        
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decodeIfPresent(Int.self, forKey: .id)
         movieCast = try values.decodeIfPresent([MovieCastResults].self, forKey: .movieCast)

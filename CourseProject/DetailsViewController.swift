@@ -24,12 +24,12 @@ class DetailsViewController: UIViewController {
     var detailsOriginalLanguage: String = ""
     var targetMovie: Int = 0
     var targetTvShow: Int = 0
+    var movieOrTvShow: Int = 0
+    var videoId: String = ""
     var savedMovieCast: [MovieCastResultsToSave] = []
     var savedTvCast: [TvCastResultsToSave] = []
     var savedMovieTrailers: [MovieTrailersRelultsToSave] = []
     var savedTvTrailers: [TvTrailersRelultsToSave] = []
-    var movieOrTvShow: Int = 0
-    var videoId: String = ""
     
     let transformerForBackground = SDImageResizingTransformer(size: CGSize(width: 414, height: 896), scaleMode: .fill)
     let transformerForPoster = SDImageResizingTransformer(size: CGSize(width: 300, height: 450), scaleMode: .fill)
@@ -51,15 +51,51 @@ class DetailsViewController: UIViewController {
         
         RequestManager.shared.detailsViewControllerInstance = self
         
-        detailsCastCollectionView!.register(UINib(nibName: "DetailsCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DetailsCollectionViewCell")
+        detailsCastCollectionView!.register(UINib(nibName: "DetailsCollectionViewCell", bundle: nil),
+                                            forCellWithReuseIdentifier: "DetailsCollectionViewCell")
+        setBackgroundImage()
+        setPosterImageAndTrailerVideo()
+        setLabelsTexts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
+        self.tabBarController?.tabBar.layer.isHidden = true
+    }
+    
+    //MARK: - Private
+    
+    private func applyBlur(imageView: UIImageView) {
+        
+        let regularBlur = UIBlurEffect(style: UIBlurEffect.Style.regular)
+        let blurView = UIVisualEffectView(effect: regularBlur)
+        blurView.frame = imageView.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        imageView.addSubview(blurView)
+    }
+    
+    private func setBackgroundImage() {
         
         self.detailsScrollView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.detailsMainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
-        self.detailsBackgroundImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(backgroundImageViewURL)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformerForBackground])
-        blur(imageView: detailsBackgroundImageView)
-        self.detailsTitleLabel.text = detailsTitle
+        self.detailsBackgroundImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(backgroundImageViewURL)"),
+                                                    placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformerForBackground])
+        applyBlur(imageView: detailsBackgroundImageView)
+    }
+    
+    private func setPosterImageAndTrailerVideo() {
+        
         self.detailsPosterImageView.layer.cornerRadius = 25
-        self.detailsPosterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(detailsPosterURL)"), placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformerForPoster])
+        self.detailsPosterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(detailsPosterURL)"),
+                                                placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformerForPoster])
+        self.detailsPlayerView.load(withVideoId: videoId)
+    }
+    
+    private func setLabelsTexts() {
+        
+        self.detailsTitleLabel.text = detailsTitle
         self.detailsDescriptionLabel.text = detailsDescription
         self.detailsAverageVoteLabel.text = "Average rate - \(detailsAverageVote) in \(detailsVoteCount) votes"
         if detailsOriginalLanguage == "en" {
@@ -78,31 +114,19 @@ class DetailsViewController: UIViewController {
             detailsLanguageLabel.text = "Original language: French"
         } else if detailsOriginalLanguage == "ml" {
             detailsLanguageLabel.text = "Original language: Malayalam"
+        } else if detailsOriginalLanguage == "pl" {
+            detailsLanguageLabel.text = "Original language: Polish"
         } else {
             detailsLanguageLabel.text = detailsOriginalLanguage
         }
         self.detailsCastCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
-            self.detailsPlayerView.load(withVideoId: videoId)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.navigationBar.isHidden = true
-        self.tabBarController?.tabBar.layer.isHidden = true
-    }
-    
-    func blur(imageView: UIImageView) {
-        let regularBlur = UIBlurEffect(style: UIBlurEffect.Style.regular)
-        let blurView = UIVisualEffectView(effect: regularBlur)
-        blurView.frame = imageView.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        imageView.addSubview(blurView)
-    }
-    
 }
 
+//MARK: - Extensions
+
 extension DetailsViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if movieOrTvShow == 0 {
@@ -114,7 +138,8 @@ extension DetailsViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let detailsCell = detailsCastCollectionView.dequeueReusableCell(withReuseIdentifier: "DetailsCollectionViewCell", for: indexPath) as? DetailsCollectionViewCell else { return UICollectionViewCell() }
+        guard let detailsCell = detailsCastCollectionView.dequeueReusableCell(withReuseIdentifier: "DetailsCollectionViewCell",
+                                                                              for: indexPath) as? DetailsCollectionViewCell else { return UICollectionViewCell() }
         if movieOrTvShow == 0 {
             var dataToDisplay = MovieCastResultsToSave()
             
