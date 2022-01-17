@@ -12,6 +12,7 @@ import Lottie
 class WatchLaterCollectionViewCell: UICollectionViewCell {
     
     static let shared = WatchLaterCollectionViewCell()
+    let languagesDictionary = DetailsConstants().originalLanguages
     
     @IBOutlet weak var watchLaterMainView: UIView!
     @IBOutlet weak var watchLaterImageView: UIImageView!
@@ -46,25 +47,7 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
         self.watchLaterRatingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.watchLaterTotalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
         self.watchLaterReleaseDateLabel.text = "Release: \(dataToDisplay.releaseDate)"
-        if dataToDisplay.originalLanguage == "en" {
-            watchLaterOriginalLanguageLabel.text = "Original language: English"
-        } else if dataToDisplay.originalLanguage == "es" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Spanish"
-        } else if dataToDisplay.originalLanguage == "ru" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Russian"
-        } else if dataToDisplay.originalLanguage == "ko" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Korean"
-        } else if dataToDisplay.originalLanguage == "it" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Italian"
-        } else if dataToDisplay.originalLanguage == "ja" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Japanese"
-        } else if dataToDisplay.originalLanguage == "fr" {
-            watchLaterOriginalLanguageLabel.text = "Original language: French"
-        } else if dataToDisplay.originalLanguage == "ml" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Malayalam"
-        } else {
-            watchLaterOriginalLanguageLabel.text = dataToDisplay.originalLanguage
-        }
+        self.watchLaterOriginalLanguageLabel.text = "Original language: \(languagesDictionary[dataToDisplay.originalLanguage] ?? "nil")"
         self.moviesData = dataToDisplay
     }
     
@@ -77,25 +60,7 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
         self.watchLaterRatingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.watchLaterTotalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
         self.watchLaterReleaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate)"
-        if dataToDisplay.originalLanguage == "en" {
-            watchLaterOriginalLanguageLabel.text = "Original language: English"
-        } else if dataToDisplay.originalLanguage == "es" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Spanish"
-        } else if dataToDisplay.originalLanguage == "ru" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Russian"
-        } else if dataToDisplay.originalLanguage == "ko" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Korean"
-        } else if dataToDisplay.originalLanguage == "it" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Italian"
-        } else if dataToDisplay.originalLanguage == "ja" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Japanese"
-        } else if dataToDisplay.originalLanguage == "fr" {
-            watchLaterOriginalLanguageLabel.text = "Original language: French"
-        } else if dataToDisplay.originalLanguage == "ml" {
-            watchLaterOriginalLanguageLabel.text = "Original language: Malayalam"
-        } else {
-            watchLaterOriginalLanguageLabel.text = dataToDisplay.originalLanguage
-        }
+        self.watchLaterOriginalLanguageLabel.text = "Original language: \(languagesDictionary[dataToDisplay.originalLanguage] ?? "nil")"
         self.seriesData = dataToDisplay
     }
     

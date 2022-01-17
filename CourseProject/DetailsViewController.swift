@@ -95,30 +95,11 @@ class DetailsViewController: UIViewController {
     
     private func setLabelsTexts() {
         
+        let languagesDictionary = DetailsConstants().originalLanguages
         self.detailsTitleLabel.text = detailsTitle
         self.detailsDescriptionLabel.text = detailsDescription
         self.detailsAverageVoteLabel.text = "Average rate - \(detailsAverageVote) in \(detailsVoteCount) votes"
-        if detailsOriginalLanguage == "en" {
-            detailsLanguageLabel.text = "Original language: English"
-        } else if detailsOriginalLanguage == "es" {
-            detailsLanguageLabel.text = "Original language: Spanish"
-        } else if detailsOriginalLanguage == "ru" {
-            detailsLanguageLabel.text = "Original language: Russian"
-        } else if detailsOriginalLanguage == "ko" {
-            detailsLanguageLabel.text = "Original language: Korean"
-        } else if detailsOriginalLanguage == "it" {
-            detailsLanguageLabel.text = "Original language: Italian"
-        } else if detailsOriginalLanguage == "ja" {
-            detailsLanguageLabel.text = "Original language: Japanese"
-        } else if detailsOriginalLanguage == "fr" {
-            detailsLanguageLabel.text = "Original language: French"
-        } else if detailsOriginalLanguage == "ml" {
-            detailsLanguageLabel.text = "Original language: Malayalam"
-        } else if detailsOriginalLanguage == "pl" {
-            detailsLanguageLabel.text = "Original language: Polish"
-        } else {
-            detailsLanguageLabel.text = detailsOriginalLanguage
-        }
+        self.detailsLanguageLabel.text = "Original language: \(languagesDictionary[detailsOriginalLanguage] ?? "Unknown")"
         self.detailsCastCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
     }
 }
@@ -156,4 +137,11 @@ extension DetailsViewController: UICollectionViewDataSource {
             return detailsCell
         }
     }
+}
+
+struct DetailsConstants {
+    
+    let originalLanguages: [String: String] = ["en" : "English", "es" : "Spanish", "ru" : "Russian",
+                                               "ko": "Korean", "it" : "Italian", "ja" : "Japanese",
+                                               "fr" : "French", "ml" : "Malayalam", "pl" : "Polish", "id" : "Indonesian", "nil" : "Unknown"]
 }

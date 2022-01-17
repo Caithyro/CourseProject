@@ -13,6 +13,7 @@ import SwiftUI
 class TrendingCollectionViewCell: UICollectionViewCell {
     
     static let shared = TrendingCollectionViewCell()
+    let languagesDictionary = DetailsConstants().originalLanguages
     weak var trendingViewControllerInstance = TrendingViewController()
     
     var moviesData = MoviesResultsToSave()
@@ -65,25 +66,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
                                          placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.releaseDateLabel.text = "Release: \(dataToDisplay.releaseDate)"
-        if dataToDisplay.originalLanguage == "en" {
-            originalLanguageLabel.text = "Original language: English"
-        } else if dataToDisplay.originalLanguage == "es" {
-            originalLanguageLabel.text = "Original language: Spanish"
-        } else if dataToDisplay.originalLanguage == "ru" {
-            originalLanguageLabel.text = "Original language: Russian"
-        } else if dataToDisplay.originalLanguage == "ko" {
-            originalLanguageLabel.text = "Original language: Korean"
-        } else if dataToDisplay.originalLanguage == "it" {
-            originalLanguageLabel.text = "Original language: Italian"
-        } else if dataToDisplay.originalLanguage == "ja" {
-            originalLanguageLabel.text = "Original language: Japanese"
-        } else if dataToDisplay.originalLanguage == "fr" {
-            originalLanguageLabel.text = "Original language: French"
-        } else if dataToDisplay.originalLanguage == "ml" {
-            originalLanguageLabel.text = "Original language: Malayalam"
-        } else {
-            originalLanguageLabel.text = dataToDisplay.originalLanguage
-        }
+        self.originalLanguageLabel.text = "Original language: \(languagesDictionary[dataToDisplay.originalLanguage] ?? "nil")"
         self.totalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
         self.mainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.moviesData = dataToDisplay
@@ -98,25 +81,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
                                          placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
         self.releaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate)"
-        if dataToDisplay.originalLanguage == "en" {
-            originalLanguageLabel.text = "Original language: English"
-        } else if dataToDisplay.originalLanguage == "es" {
-            originalLanguageLabel.text = "Original language: Spanish"
-        } else if dataToDisplay.originalLanguage == "ru" {
-            originalLanguageLabel.text = "Original language: Russian"
-        } else if dataToDisplay.originalLanguage == "ko" {
-            originalLanguageLabel.text = "Original language: Korean"
-        } else if dataToDisplay.originalLanguage == "it" {
-            originalLanguageLabel.text = "Original language: Italian"
-        } else if dataToDisplay.originalLanguage == "ja" {
-            originalLanguageLabel.text = "Original language: Japanese"
-        } else if dataToDisplay.originalLanguage == "fr" {
-            originalLanguageLabel.text = "Original language: French"
-        } else if dataToDisplay.originalLanguage == "ml" {
-            originalLanguageLabel.text = "Original language: Malayalam"
-        } else {
-            originalLanguageLabel.text = dataToDisplay.originalLanguage
-        }
+        self.originalLanguageLabel.text = "Original language: \(languagesDictionary[dataToDisplay.originalLanguage] ?? "nil")"
         self.totalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
         self.mainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.seriesData = dataToDisplay
@@ -130,25 +95,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
                                          placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage ?? 0.0)"
         self.releaseDateLabel.text = "Release: \(dataToDisplay.releaseDate ?? "")"
-        if dataToDisplay.originalLanguage == "en" {
-            originalLanguageLabel.text = "Original language: English"
-        } else if dataToDisplay.originalLanguage == "es" {
-            originalLanguageLabel.text = "Original language: Spanish"
-        } else if dataToDisplay.originalLanguage == "ru" {
-            originalLanguageLabel.text = "Original language: Russian"
-        } else if dataToDisplay.originalLanguage == "ko" {
-            originalLanguageLabel.text = "Original language: Korean"
-        } else if dataToDisplay.originalLanguage == "it" {
-            originalLanguageLabel.text = "Original language: Italian"
-        } else if dataToDisplay.originalLanguage == "ja" {
-            originalLanguageLabel.text = "Original language: Japanese"
-        } else if dataToDisplay.originalLanguage == "fr" {
-            originalLanguageLabel.text = "Original language: French"
-        } else if dataToDisplay.originalLanguage == "ml" {
-            originalLanguageLabel.text = "Original language: Malayalam"
-        } else {
-            originalLanguageLabel.text = dataToDisplay.originalLanguage ?? ""
-        }
+        self.originalLanguageLabel.text = "Original language: \(languagesDictionary[dataToDisplay.originalLanguage ?? "nil"] ?? "nil")"
         self.totalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount ?? 0)"
         self.mainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.movieRequestDataToDisplay.id = dataToDisplay.id ?? 0
@@ -175,25 +122,7 @@ class TrendingCollectionViewCell: UICollectionViewCell {
                                          placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.ratingLabel.text = "Average rating: \(dataToDisplay.voteAverage ?? 0.0)"
         self.releaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate ?? "")"
-        if dataToDisplay.originalLanguage == "en" {
-            originalLanguageLabel.text = "Original language: English"
-        } else if dataToDisplay.originalLanguage == "es" {
-            originalLanguageLabel.text = "Original language: Spanish"
-        } else if dataToDisplay.originalLanguage == "ru" {
-            originalLanguageLabel.text = "Original language: Russian"
-        } else if dataToDisplay.originalLanguage == "ko" {
-            originalLanguageLabel.text = "Original language: Korean"
-        } else if dataToDisplay.originalLanguage == "it" {
-            originalLanguageLabel.text = "Original language: Italian"
-        } else if dataToDisplay.originalLanguage == "ja" {
-            originalLanguageLabel.text = "Original language: Japanese"
-        } else if dataToDisplay.originalLanguage == "fr" {
-            originalLanguageLabel.text = "Original language: French"
-        } else if dataToDisplay.originalLanguage == "ml" {
-            originalLanguageLabel.text = "Original language: Malayalam"
-        } else {
-            originalLanguageLabel.text = dataToDisplay.originalLanguage ?? ""
-        }
+        self.originalLanguageLabel.text = "Original language: \(languagesDictionary[dataToDisplay.originalLanguage ?? "nil"] ?? "nil")"
         self.totalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount ?? 0)"
         self.mainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
         self.tvRequestDataToDisplay.id = dataToDisplay.id ?? 0
