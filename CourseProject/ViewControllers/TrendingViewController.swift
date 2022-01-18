@@ -45,32 +45,24 @@ class TrendingViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
     }
     
-    func displaySaveSuccessfullMessage() {
+    func displaySaveStatusAlert(saveSuccess: Bool) {
         
         let statusAlert = StatusAlert()
-        
         statusAlert.appearance.backgroundColor = UIColor.systemGray2
         statusAlert.appearance.blurStyle = .regular
-        statusAlert.alertShowingDuration = 1
-        statusAlert.image = UIImage(systemName: "heart.fill")
-        statusAlert.title = TrendingConstants.saveSuccessString
-        statusAlert.message = ""
+        statusAlert.alertShowingDuration = TrendingConstants.alertShowingDuration
         statusAlert.canBePickedOrDismissed = true
-        statusAlert.showInKeyWindow()
-    }
-    
-    func displaySaveFailedMessage() {
-        
-        let statusAlert = StatusAlert()
-        
-        statusAlert.appearance.backgroundColor = UIColor.systemGray2
-        statusAlert.appearance.blurStyle = .regular
-        statusAlert.alertShowingDuration = 1
-        statusAlert.image = UIImage(systemName: "heart.slash.fill")
-        statusAlert.title = TrendingConstants.saveFailString
-        statusAlert.message = ""
-        statusAlert.canBePickedOrDismissed = true
-        statusAlert.showInKeyWindow()
+        if saveSuccess == true {
+            statusAlert.image = UIImage(systemName: "heart.fill")
+            statusAlert.title = TrendingConstants.saveSuccessString
+            statusAlert.message = ""
+            statusAlert.showInKeyWindow()
+        } else {
+            statusAlert.image = UIImage(systemName: "heart.slash.fill")
+            statusAlert.title = TrendingConstants.saveFailString
+            statusAlert.message = ""
+            statusAlert.showInKeyWindow()
+        }
     }
     
     @IBAction func trendingSegmentedControlSwitched(_ sender: Any) {
@@ -337,7 +329,8 @@ extension TrendingViewController: UISearchBarDelegate {
 
 struct TrendingConstants {
     
-    static let saveSuccessString = "Saved succesfully"
+    static let saveSuccessString = "Saved to watch later"
     static let saveFailString = "Save failed"
     static let titleString = "Trending for today"
+    static let alertShowingDuration = 1.2
 }

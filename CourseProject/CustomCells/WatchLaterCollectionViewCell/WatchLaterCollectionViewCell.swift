@@ -12,7 +12,7 @@ import Lottie
 class WatchLaterCollectionViewCell: UICollectionViewCell {
     
     static let shared = WatchLaterCollectionViewCell()
-    let languagesDictionary = DetailsConstants().originalLanguages
+    let languagesDictionary = DetailsViewController.shared.originalLanguages
     
     @IBOutlet weak var watchLaterMainView: UIView!
     @IBOutlet weak var watchLaterImageView: UIImageView!

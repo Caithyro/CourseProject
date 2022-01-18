@@ -116,9 +116,9 @@ class DataManager {
             try! realm.write {
                 realm.create(MoviesResultsToSaveToWatchLater.self, value: moviesData, update: .all)
             }
-            trendingViewControllerInstance?.displaySaveSuccessfullMessage()
+            trendingViewControllerInstance?.displaySaveStatusAlert(saveSuccess: true)
         } catch {
-            trendingViewControllerInstance?.displaySaveFailedMessage()
+            trendingViewControllerInstance?.displaySaveStatusAlert(saveSuccess: false)
         }
     }
     
@@ -135,9 +135,9 @@ class DataManager {
             try! realm.write {
                 realm.create(TvResultsToSaveToWatchLater.self, value: tvShowsData, update: .all)
             }
-            trendingViewControllerInstance?.displaySaveSuccessfullMessage()
+            trendingViewControllerInstance?.displaySaveStatusAlert(saveSuccess: true)
         } catch {
-            trendingViewControllerInstance?.displaySaveFailedMessage()
+            trendingViewControllerInstance?.displaySaveStatusAlert(saveSuccess: false)
         }
     }
     

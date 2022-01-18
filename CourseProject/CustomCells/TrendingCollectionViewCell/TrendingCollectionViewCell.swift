@@ -13,7 +13,7 @@ import SwiftUI
 class TrendingCollectionViewCell: UICollectionViewCell {
     
     static let shared = TrendingCollectionViewCell()
-    let languagesDictionary = DetailsConstants().originalLanguages
+    let languagesDictionary = DetailsViewController.shared.originalLanguages
     weak var trendingViewControllerInstance = TrendingViewController()
     
     var moviesData = MoviesResultsToSave()

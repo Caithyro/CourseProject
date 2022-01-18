@@ -33,6 +33,9 @@ class DetailsViewController: UIViewController {
     
     let transformerForBackground = SDImageResizingTransformer(size: CGSize(width: 414, height: 896), scaleMode: .fill)
     let transformerForPoster = SDImageResizingTransformer(size: CGSize(width: 300, height: 450), scaleMode: .fill)
+    let originalLanguages: [String: String] = ["en" : "English", "es" : "Spanish", "ru" : "Russian",
+                                               "ko": "Korean", "it" : "Italian", "ja" : "Japanese",
+                                               "fr" : "French", "ml" : "Malayalam", "pl" : "Polish", "id" : "Indonesian", "nil" : "Unknown"]
     
     @IBOutlet weak var detailsBackgroundImageView: UIImageView!
     @IBOutlet weak var detailsTitleLabel: UILabel!
@@ -95,7 +98,7 @@ class DetailsViewController: UIViewController {
     
     private func setLabelsTexts() {
         
-        let languagesDictionary = DetailsConstants().originalLanguages
+        let languagesDictionary = self.originalLanguages
         self.detailsTitleLabel.text = detailsTitle
         self.detailsDescriptionLabel.text = detailsDescription
         self.detailsAverageVoteLabel.text = "Average rate - \(detailsAverageVote) in \(detailsVoteCount) votes"
@@ -137,11 +140,4 @@ extension DetailsViewController: UICollectionViewDataSource {
             return detailsCell
         }
     }
-}
-
-struct DetailsConstants {
-    
-    let originalLanguages: [String: String] = ["en" : "English", "es" : "Spanish", "ru" : "Russian",
-                                               "ko": "Korean", "it" : "Italian", "ja" : "Japanese",
-                                               "fr" : "French", "ml" : "Malayalam", "pl" : "Polish", "id" : "Indonesian", "nil" : "Unknown"]
 }

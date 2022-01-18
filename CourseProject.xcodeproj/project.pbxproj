@@ -121,6 +121,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		660561572796FF17000EAF7F /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				664A35F827722FA1001098FA /* TrendingViewController.swift */,
+				664A360F277241DB001098FA /* WatchLaterViewController.swift */,
+				664A36162772425E001098FA /* DetailsViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		664A35E827722FA1001098FA = {
 			isa = PBXGroup;
 			children = (
@@ -142,6 +152,7 @@
 		664A35F327722FA1001098FA /* CourseProject */ = {
 			isa = PBXGroup;
 			children = (
+				660561572796FF17000EAF7F /* ViewControllers */,
 				66DC45A82778E37000CD1FB1 /* Animations */,
 				668F11E42775DB4000F7D968 /* CustomCells */,
 				668F11E32775CC3100F7D968 /* Managers */,
@@ -149,9 +160,6 @@
 				664A360827723048001098FA /* Podfile */,
 				664A35F427722FA1001098FA /* AppDelegate.swift */,
 				664A35F627722FA1001098FA /* SceneDelegate.swift */,
-				664A35F827722FA1001098FA /* TrendingViewController.swift */,
-				664A360F277241DB001098FA /* WatchLaterViewController.swift */,
-				664A36162772425E001098FA /* DetailsViewController.swift */,
 				664A35FA27722FA1001098FA /* Main.storyboard */,
 				6676FC032777775900CC6FC1 /* Assets.xcassets */,
 				664A35FF27722FA3001098FA /* LaunchScreen.storyboard */,
