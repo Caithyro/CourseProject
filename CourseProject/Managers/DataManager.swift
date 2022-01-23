@@ -231,11 +231,11 @@ class DataManager {
             try realm.write {
                 realm.delete(realm.objects(MoviesResultsToSaveToWatchLater.self).filter("id = %@", targetMovie))
             }
+            watchLaterViewControllerInstance?.watchLaterViewModel.savedMoviesData = DataManager.shared.getMoviesWatchLaterList()
+            watchLaterViewControllerInstance?.watchLaterCollectionView.reloadData()
         } catch {
             print(error)
         }
-        watchLaterViewControllerInstance?.savedMoviesData = DataManager.shared.getMoviesWatchLaterList()
-        watchLaterViewControllerInstance?.watchLaterCollectionView.reloadData()
     }
     
     func removeTvFromWatchLater(targetTvShow: Int) {
@@ -244,11 +244,11 @@ class DataManager {
             try realm.write {
                 realm.delete(realm.objects(TvResultsToSaveToWatchLater.self).filter("id = %@", targetTvShow))
             }
+            watchLaterViewControllerInstance?.watchLaterViewModel.savedSeriesData = DataManager.shared.getTvWatchLaterList()
+            watchLaterViewControllerInstance?.watchLaterCollectionView.reloadData()
         } catch {
             print(error)
         }
-        watchLaterViewControllerInstance?.savedSeriesData = DataManager.shared.getTvWatchLaterList()
-        watchLaterViewControllerInstance?.watchLaterCollectionView.reloadData()
     }
     
     func clearTrendingMoviesRealmData() {

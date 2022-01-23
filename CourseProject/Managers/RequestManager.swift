@@ -21,8 +21,6 @@ class RequestManager {
     var tvCastResponceData: [TvCastResults] = []
     var movieTrailersResponceData: [MovieTrailersRelults] = []
     var tvTrailersResponceData: [TvTrailersRelults] = []
-    var movieSearchResponceData: [MovieSearchResults] = []
-    var tvSearchResponceData: [TvSearchResults] = []
     
     func requestMovies() {
         
@@ -33,6 +31,7 @@ class RequestManager {
             
             do {
                 
+                self.moviesResponceData.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
                 let moviesResponseModel = try jsonDecoder.decode(MoviesResultsModel.self, from: moviesResponceData1.data!)
@@ -63,12 +62,9 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                trendingViewControllerInstance?.savedMoviesArray = DataManager.shared.getMoviesFromRealm()
-                trendingViewControllerInstance?.trendingCollectionView.reloadData()
+                self.trendingViewControllerInstance?.trendingCollectionView.reloadData()
             } catch {
                 print(error)
-                trendingViewControllerInstance?.savedMoviesArray = DataManager.shared.getMoviesFromRealm()
-                trendingViewControllerInstance?.trendingCollectionView.reloadData()
             }
         }
     }
@@ -82,6 +78,7 @@ class RequestManager {
             
             do {
                 
+                self.tvShowsResponceData.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
                 let tvResponseModel = try jsonDecoder.decode(TvResultsModel.self, from: tvResponceData1.data!)
@@ -110,6 +107,7 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
+                self.trendingViewControllerInstance?.trendingCollectionView.reloadData()
             } catch {
                 print(error)
             }
@@ -154,7 +152,7 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                detailsViewControllerInstance?.savedMovieCast = DataManager.shared.getMovieCastFromRealm()
+                detailsViewControllerInstance?.detailsViewModel.savedMovieCast = DataManager.shared.getMovieCastFromRealm()
                 detailsViewControllerInstance?.detailsCastCollectionView.reloadData()
             } catch {
                 print(error)
@@ -199,7 +197,7 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                detailsViewControllerInstance?.savedTvCast = DataManager.shared.getTvCastFromRealm()
+                detailsViewControllerInstance?.detailsViewModel.savedTvCast = DataManager.shared.getTvCastFromRealm()
                 detailsViewControllerInstance?.detailsCastCollectionView.reloadData()
             } catch {
                 print(error)
@@ -243,8 +241,8 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                detailsViewControllerInstance?.savedMovieTrailers = DataManager.shared.getMovieTrailersFromRealm()
-                detailsViewControllerInstance?.detailsPlayerView.load(withVideoId: detailsViewControllerInstance?.savedMovieTrailers.first?.key ?? "")
+                detailsViewControllerInstance?.detailsViewModel.savedMovieTrailers = DataManager.shared.getMovieTrailersFromRealm()
+                detailsViewControllerInstance?.detailsPlayerView.load(withVideoId: detailsViewControllerInstance?.detailsViewModel.savedMovieTrailers.first?.key ?? "")
             } catch {
                 print(error)
             }
@@ -287,8 +285,8 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                detailsViewControllerInstance?.savedTvTrailers = DataManager.shared.getTvTrailersFromRealm()
-                detailsViewControllerInstance?.detailsPlayerView.load(withVideoId: detailsViewControllerInstance?.savedTvTrailers.first?.key ?? "")
+                detailsViewControllerInstance?.detailsViewModel.savedTvTrailers = DataManager.shared.getTvTrailersFromRealm()
+                detailsViewControllerInstance?.detailsPlayerView.load(withVideoId: detailsViewControllerInstance?.detailsViewModel.savedTvTrailers.first?.key ?? "")
             } catch {
                 print(error)
             }
@@ -305,13 +303,13 @@ class RequestManager {
         AF.request(movieSearchRequestUrlString).response { [self]movieSearchResponceData1 in
             
             do {
-                self.movieSearchResponceData.removeAll()
+                self.moviesResponceData.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let movieSearchResponseModel = try jsonDecoder.decode(MovieSearchResultsModel.self,
+                let movieSearchResponseModel = try jsonDecoder.decode(MoviesResultsModel.self,
                                                                       from: movieSearchResponceData1.data ?? emptyData)
                 for _ in movieSearchResponseModel.results ?? [] {
-                    self.movieSearchResponceData.append(movieSearchResponseModel.results![indexForAppend])
+                    self.moviesResponceData.append(movieSearchResponseModel.results![indexForAppend])
                     indexForAppend += 1
                 }
                 indexForAppend = 0
@@ -332,13 +330,14 @@ class RequestManager {
         AF.request(tvSearchRequestUrlString).response { [self]tvSearchResponceData1 in
             
             do {
-                self.tvSearchResponceData.removeAll()
+                
+                self.tvShowsResponceData.removeAll()
                 var indexForAppend = 0
                 let jsonDecoder = JSONDecoder()
-                let tvSearchResponseModel = try jsonDecoder.decode(TvSearchResultsModel.self,
+                let tvSearchResponseModel = try jsonDecoder.decode(TvResultsModel.self,
                                                                    from: tvSearchResponceData1.data ?? emptyData)
                 for _ in tvSearchResponseModel.results ?? [] {
-                    self.tvSearchResponceData.append(tvSearchResponseModel.results![indexForAppend])
+                    self.tvShowsResponceData.append(tvSearchResponseModel.results![indexForAppend])
                     indexForAppend += 1
                 }
                 indexForAppend = 0

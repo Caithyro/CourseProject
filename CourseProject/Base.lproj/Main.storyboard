@@ -65,39 +65,17 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="fCC-Ax-oHt"/>
                                 </connections>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aUd-y6-HdA">
-                                <rect key="frame" x="0.0" y="965" width="414" height="48"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OjA-LG-nAk">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="OjA-LG-nAk" secondAttribute="bottom" id="4CY-I7-00A"/>
-                                    <constraint firstAttribute="height" constant="48" id="9Wy-gD-zyl"/>
-                                    <constraint firstItem="OjA-LG-nAk" firstAttribute="leading" secondItem="aUd-y6-HdA" secondAttribute="leading" id="Lje-EW-kvj"/>
-                                    <constraint firstAttribute="trailing" secondItem="OjA-LG-nAk" secondAttribute="trailing" id="ZYq-qw-YGd"/>
-                                    <constraint firstItem="OjA-LG-nAk" firstAttribute="top" secondItem="aUd-y6-HdA" secondAttribute="top" id="dN2-lp-Kvt"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="aUd-y6-HdA" firstAttribute="trailing" secondItem="SKW-IB-bdW" secondAttribute="trailing" id="K61-15-K9c"/>
                             <constraint firstItem="SKW-IB-bdW" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="PbC-KK-Q7e"/>
                             <constraint firstItem="MAJ-65-qbr" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="TGO-tY-VmV"/>
                             <constraint firstAttribute="trailing" secondItem="dzw-E3-i2e" secondAttribute="trailing" id="aE9-KV-FlC"/>
-                            <constraint firstItem="aUd-y6-HdA" firstAttribute="bottom" secondItem="SKW-IB-bdW" secondAttribute="bottom" constant="200" id="bGE-HY-p2b"/>
                             <constraint firstItem="3X1-2z-Iyh" firstAttribute="top" secondItem="dzw-E3-i2e" secondAttribute="bottom" constant="8" id="bsc-jP-kgr"/>
                             <constraint firstItem="dzw-E3-i2e" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="f7f-qK-GnD"/>
                             <constraint firstItem="MAJ-65-qbr" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="80" id="hTV-CL-iLz"/>
                             <constraint firstItem="dzw-E3-i2e" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="jbT-vF-FGh"/>
-                            <constraint firstItem="aUd-y6-HdA" firstAttribute="leading" secondItem="SKW-IB-bdW" secondAttribute="leading" id="kFw-r9-ZZJ"/>
                             <constraint firstItem="3X1-2z-Iyh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="p29-W9-fkN"/>
                             <constraint firstItem="SKW-IB-bdW" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="qaX-xo-wtC"/>
                             <constraint firstItem="SKW-IB-bdW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="t1l-7Z-hpI"/>
@@ -107,9 +85,6 @@
                     <navigationItem key="navigationItem" id="uXq-aW-18H"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="SaveMessageTopConstraint" destination="bGE-HY-p2b" id="ho5-V3-MhS"/>
-                        <outlet property="saveMessageLabel" destination="OjA-LG-nAk" id="bf4-yy-Gfu"/>
-                        <outlet property="saveMessageView" destination="aUd-y6-HdA" id="UOR-pC-qIP"/>
                         <outlet property="trendingCollectionView" destination="SKW-IB-bdW" id="dYo-zB-ol2"/>
                         <outlet property="trendingSearchBar" destination="dzw-E3-i2e" id="ZIW-wN-G8L"/>
                         <outlet property="trendingSegmentedControl" destination="3X1-2z-Iyh" id="hOR-wP-v8d"/>

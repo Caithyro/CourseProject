@@ -12,7 +12,9 @@ import Lottie
 class WatchLaterCollectionViewCell: UICollectionViewCell {
     
     static let shared = WatchLaterCollectionViewCell()
-    let languagesDictionary = DetailsViewController.shared.originalLanguages
+    let languagesDictionary = DetailsViewController.shared.detailsViewModel.originalLanguages
+    var watchLaterViewModel = WatchLaterViewControllerViewModel()
+    var movieOrTvShow: Int = 0
     
     @IBOutlet weak var watchLaterMainView: UIView!
     @IBOutlet weak var watchLaterImageView: UIImageView!
@@ -30,7 +32,8 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         
         super.awakeFromNib()
-        self.watchLaterMainView.layer.backgroundColor = .init(genericCMYKCyan: 0.0, magenta: 0.0, yellow: 0, black: 0.0, alpha: 0)
+        self.watchLaterMainView.layer.backgroundColor = .init(genericCMYKCyan: 0.0, magenta: 0.0,
+                                                              yellow: 0, black: 0.0, alpha: 0)
     }
     
     @IBAction func deleteButtonPressed(_ sender: Any) {
@@ -39,15 +42,15 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
     }
     
     func configureMoviesCell(dataToDisplay: MoviesResultsToSaveToWatchLater) {
-
+        
         self.watchLaterImageView.layer.cornerRadius = 15
         self.watchLaterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"),
                                              placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.watchLaterTitleLabel.text = "\(dataToDisplay.title)"
-        self.watchLaterRatingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
-        self.watchLaterTotalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
-        self.watchLaterReleaseDateLabel.text = "Release: \(dataToDisplay.releaseDate)"
-        self.watchLaterOriginalLanguageLabel.text = "Original language: \(languagesDictionary[dataToDisplay.originalLanguage] ?? "nil")"
+        self.watchLaterRatingLabel.text = "\(WatchLaterConstants.averageRatingString) \(dataToDisplay.voteAverage)"
+        self.watchLaterTotalVotesLabel.text = "\(WatchLaterConstants.totalVotesString) \(dataToDisplay.voteCount)"
+        self.watchLaterReleaseDateLabel.text = "\(WatchLaterConstants.releaseDateString) \(dataToDisplay.releaseDate)"
+        self.watchLaterOriginalLanguageLabel.text = "\(WatchLaterConstants.originalLanguageString) \(languagesDictionary[dataToDisplay.originalLanguage] ?? "nil")"
         self.moviesData = dataToDisplay
     }
     
@@ -57,10 +60,10 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
         self.watchLaterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath)"),
                                              placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.watchLaterTitleLabel.text = "\(dataToDisplay.name)"
-        self.watchLaterRatingLabel.text = "Average rating: \(dataToDisplay.voteAverage)"
-        self.watchLaterTotalVotesLabel.text = "Total votes: \(dataToDisplay.voteCount)"
-        self.watchLaterReleaseDateLabel.text = "First air: \(dataToDisplay.firstAirDate)"
-        self.watchLaterOriginalLanguageLabel.text = "Original language: \(languagesDictionary[dataToDisplay.originalLanguage] ?? "nil")"
+        self.watchLaterRatingLabel.text = "\(WatchLaterConstants.averageRatingString) \(dataToDisplay.voteAverage)"
+        self.watchLaterTotalVotesLabel.text = "\(WatchLaterConstants.totalVotesString) \(dataToDisplay.voteCount)"
+        self.watchLaterReleaseDateLabel.text = "\(WatchLaterConstants.firstAirString) \(dataToDisplay.firstAirDate)"
+        self.watchLaterOriginalLanguageLabel.text = "\(WatchLaterConstants.originalLanguageString) \(languagesDictionary[dataToDisplay.originalLanguage] ?? "nil")"
         self.seriesData = dataToDisplay
     }
     
@@ -88,12 +91,13 @@ class WatchLaterCollectionViewCell: UICollectionViewCell {
     
     private func removeDeleteAnimation(animationCompleted: Bool) {
         
+        let movieOrTvShowForDelete = WatchLaterCollectionViewCell.shared.movieOrTvShow
         if animationCompleted == true {
             deleteAnimationView!.removeFromSuperview()
-            if DetailsViewController.shared.movieOrTvShow == 0 {
-                DataManager.shared.removeMovieFromWatchLater(targetMovie: moviesData.id)
+            if movieOrTvShowForDelete == 0 {
+                watchLaterViewModel.removeMovieFromWatchLater(targetMovie: moviesData.id)
             } else {
-                DataManager.shared.removeTvFromWatchLater(targetTvShow: seriesData.id)
+                watchLaterViewModel.removeTvShowFromWatchLater(targetTvShow: seriesData.id)
             }
         }
     }
