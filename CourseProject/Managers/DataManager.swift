@@ -12,8 +12,6 @@ import SwiftUI
 class DataManager {
     
     static let shared = DataManager()
-    weak var watchLaterViewControllerInstance = WatchLaterViewController()
-    weak var trendingViewControllerInstance = TrendingViewController()
     
     private let realm = try! Realm()
     
@@ -112,14 +110,9 @@ class DataManager {
                                                                  "\(posterPath)", "\(title)", video, voteAverage, popularity,
                                                                  "\(mediaType)"])
         
-        do {
             try! realm.write {
                 realm.create(MoviesResultsToSaveToWatchLater.self, value: moviesData, update: .all)
             }
-            trendingViewControllerInstance?.displaySaveStatusAlert(saveSuccess: true)
-        } catch {
-            trendingViewControllerInstance?.displaySaveStatusAlert(saveSuccess: false)
-        }
     }
     
     func saveTvShowsToWatchLater(originalLanguage : String, posterPath: String, voteCount: Int,
@@ -131,14 +124,9 @@ class DataManager {
                                                               "\(overview)", id, "\(originalName)", "\(firstAirDate)", "\(name)",
                                                               "\(backdropPath)", popularity, "\(mediaType)"])
         
-        do {
             try! realm.write {
                 realm.create(TvResultsToSaveToWatchLater.self, value: tvShowsData, update: .all)
             }
-            trendingViewControllerInstance?.displaySaveStatusAlert(saveSuccess: true)
-        } catch {
-            trendingViewControllerInstance?.displaySaveStatusAlert(saveSuccess: false)
-        }
     }
     
     func getMoviesFromRealm() -> [MoviesResultsToSave] {
@@ -231,8 +219,6 @@ class DataManager {
             try realm.write {
                 realm.delete(realm.objects(MoviesResultsToSaveToWatchLater.self).filter("id = %@", targetMovie))
             }
-            watchLaterViewControllerInstance?.watchLaterViewModel.savedMoviesData = DataManager.shared.getMoviesWatchLaterList()
-            watchLaterViewControllerInstance?.watchLaterCollectionView.reloadData()
         } catch {
             print(error)
         }
@@ -244,8 +230,6 @@ class DataManager {
             try realm.write {
                 realm.delete(realm.objects(TvResultsToSaveToWatchLater.self).filter("id = %@", targetTvShow))
             }
-            watchLaterViewControllerInstance?.watchLaterViewModel.savedSeriesData = DataManager.shared.getTvWatchLaterList()
-            watchLaterViewControllerInstance?.watchLaterCollectionView.reloadData()
         } catch {
             print(error)
         }

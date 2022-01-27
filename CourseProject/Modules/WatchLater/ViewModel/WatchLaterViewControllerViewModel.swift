@@ -6,38 +6,58 @@
 //
 
 import Foundation
+import UIKit
+import Lottie
 
 class WatchLaterViewControllerViewModel {
     
+    private let dataManager = DataManager.shared
+    
     var savedMoviesData: [MoviesResultsToSaveToWatchLater] = []
     var savedSeriesData: [TvResultsToSaveToWatchLater] = []
+    var movieOrTvShow: Int = 0
     
-    func getMediaDataFromRealm(completion: @escaping(() -> ())) {
+    func getMoviesForWatchLater(completion: @escaping(() -> ())) {
         
-        self.savedMoviesData = DataManager.shared.getMoviesWatchLaterList()
-        self.savedSeriesData = DataManager.shared.getTvWatchLaterList()
+        self.savedMoviesData = dataManager.getMoviesWatchLaterList()
         completion()
     }
     
-    func getMoviesFromWatchLater(completion: @escaping(() -> ())) {
+    func getTvShowsForWatchLater(completion: @escaping(() -> ())) {
         
-        self.savedMoviesData = DataManager.shared.getMoviesWatchLaterList()
+        self.savedSeriesData = dataManager.getTvWatchLaterList()
         completion()
     }
     
-    func getTvShowsFromWatchLater(completion: @escaping(() -> ())) {
+    func removeMovieFromWatchLater(targetMovie: Int, indexForRemove: Int) {
         
-        self.savedSeriesData = DataManager.shared.getTvWatchLaterList()
-        completion()
+        dataManager.removeMovieFromWatchLater(targetMovie: targetMovie)
+        savedMoviesData.remove(at: indexForRemove)
     }
     
-    func removeMovieFromWatchLater(targetMovie: Int) {
+    func removeTvShowFromWatchLater(targetTvShow: Int, indexForRemove: Int) {
         
-        DataManager.shared.removeMovieFromWatchLater(targetMovie: targetMovie)
+        dataManager.removeTvFromWatchLater(targetTvShow: targetTvShow)
+        savedSeriesData.remove(at: indexForRemove)
     }
     
-    func removeTvShowFromWatchLater(targetTvShow: Int) {
+    func runDeleteAnimation(animationView: AnimationView?, mainView: UIView, imageView: UIImageView,
+                   titleLabel: UILabel, ratingLabel: UILabel, totalVotesLabel: UILabel,
+                   releaseDateLabel: UILabel, originalLanguageLabel: UILabel) {
         
-        DataManager.shared.removeTvFromWatchLater(targetTvShow: targetTvShow)
+        if animationView != nil {
+            animationView!.frame = mainView.bounds
+            animationView!.contentMode = .scaleAspectFit
+            animationView!.loopMode = .playOnce
+            animationView!.animationSpeed = 2
+            mainView.addSubview(animationView!)
+            mainView.bringSubviewToFront(animationView!)
+            imageView.image = .none
+            titleLabel.text = ""
+            ratingLabel.text = ""
+            totalVotesLabel.text = ""
+            releaseDateLabel.text = ""
+            originalLanguageLabel.text = ""
+        }
     }
 }

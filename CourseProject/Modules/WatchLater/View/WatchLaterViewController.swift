@@ -9,8 +9,6 @@ import UIKit
 
 class WatchLaterViewController: UIViewController {
     
-    static let shared = WatchLaterViewController()
-    weak var trendingViewControllerInstance = TrendingViewController()
     var watchLaterViewModel = WatchLaterViewControllerViewModel()
     
     @IBOutlet weak var watchLaterCollectionView: UICollectionView!
@@ -19,35 +17,20 @@ class WatchLaterViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        DataManager.shared.watchLaterViewControllerInstance = self
         doStartupSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
-        watchLaterViewModel.getMediaDataFromRealm {
-            self.watchLaterCollectionView.reloadData()
-        }
         self.tabBarController?.tabBar.layer.isHidden = false
         self.navigationController?.navigationBar.isHidden = false
+        refreshWatchLaterList()
     }
     
     @IBAction func watchLaterSegmentedControlSwitched(_ sender: Any) {
         
-        if watchLaterSegmentedControl.selectedSegmentIndex == 0 {
-            watchLaterViewModel.getMoviesFromWatchLater {
-                self.watchLaterCollectionView.reloadData()
-                DetailsViewController.shared.detailsViewModel.movieOrTvShow = 0
-                WatchLaterCollectionViewCell.shared.movieOrTvShow = 0
-            }
-        } else {
-            watchLaterViewModel.getTvShowsFromWatchLater {
-                self.watchLaterCollectionView.reloadData()
-                DetailsViewController.shared.detailsViewModel.movieOrTvShow = 1
-                WatchLaterCollectionViewCell.shared.movieOrTvShow = 1
-            }
-        }
+        refreshWatchLaterList()
     }
     
     // MARK: - Private
@@ -55,11 +38,25 @@ class WatchLaterViewController: UIViewController {
     private func doStartupSetup() {
         
         watchLaterSegmentedControl.selectedSegmentIndex = 0
-        watchLaterCollectionView.register(UINib(nibName: WatchLaterConstants.cellName, bundle: nil),
-                                          forCellWithReuseIdentifier: WatchLaterConstants.cellName)
-        self.title = WatchLaterConstants.titleString
-        self.watchLaterCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0,
-                                                                      yellow: 0, black: 0, alpha: 0)
+        watchLaterCollectionView.register(UINib(nibName: watchLaterCellName, bundle: nil),
+                                          forCellWithReuseIdentifier: watchLaterCellName)
+        self.title = watchLaterTitleString
+        self.watchLaterCollectionView.layer.backgroundColor = transparentBackgroundColor
+    }
+    
+    private func refreshWatchLaterList() {
+        
+        if watchLaterSegmentedControl.selectedSegmentIndex == 0 {
+            watchLaterViewModel.getMoviesForWatchLater {
+                self.watchLaterCollectionView.reloadData()
+            }
+            watchLaterViewModel.movieOrTvShow = 0
+        } else {
+            watchLaterViewModel.getTvShowsForWatchLater {
+                self.watchLaterCollectionView.reloadData()
+            }
+            watchLaterViewModel.movieOrTvShow = 1
+        }
     }
 }
 
@@ -80,20 +77,22 @@ extension WatchLaterViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let watchLaterCell = watchLaterCollectionView.dequeueReusableCell(withReuseIdentifier: WatchLaterConstants.cellName,
+        guard let watchLaterCell = watchLaterCollectionView.dequeueReusableCell(withReuseIdentifier: watchLaterCellName,
                                                                                 for: indexPath) as? WatchLaterCollectionViewCell else { return UICollectionViewCell() }
         
-        var moviesDataToDisplay = MoviesResultsToSaveToWatchLater()
-        var seriesDataToDisplay = TvResultsToSaveToWatchLater()
-        
+        watchLaterCell.delegate = self
+        watchLaterCell.indexForRemove = indexPath.row
         if watchLaterSegmentedControl.selectedSegmentIndex == 0 {
+            var moviesDataToDisplay = MoviesResultsToSaveToWatchLater()
             moviesDataToDisplay = watchLaterViewModel.savedMoviesData[indexPath.row]
             watchLaterCell.configureMoviesCell(dataToDisplay: moviesDataToDisplay)
+            watchLaterCell.movieOrTvShow = 0
         } else {
+            var seriesDataToDisplay = TvResultsToSaveToWatchLater()
             seriesDataToDisplay = watchLaterViewModel.savedSeriesData[indexPath.row]
             watchLaterCell.configureSeriesCell(dataToDisplay: seriesDataToDisplay)
+            watchLaterCell.movieOrTvShow = 1
         }
-        
         return watchLaterCell
     }
 }
@@ -102,18 +101,13 @@ extension WatchLaterViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        var movieDataToDisplay = MoviesResultsToSaveToWatchLater()
-        var tvDataToDisplay = TvResultsToSaveToWatchLater()
-        
         if watchLaterSegmentedControl.selectedSegmentIndex == 0 {
-            movieDataToDisplay = watchLaterViewModel.savedMoviesData[indexPath.row]
-            let main = UIStoryboard(name: WatchLaterConstants.storyboardName, bundle: nil)
+            let movieDataToDisplay = watchLaterViewModel.savedMoviesData[indexPath.row]
+            let main = UIStoryboard(name: storyboardName, bundle: nil)
             if let detailsViewController = main.instantiateViewController(withIdentifier:
-                                                                            WatchLaterConstants.viewControllerName)
+                                                                            detailsViewControllerName)
                 as? DetailsViewController {
                 navigationController?.pushViewController(detailsViewController, animated: true)
-                RequestManager.shared.requestMovieCast(targetMovieId: movieDataToDisplay.id)
-                RequestManager.shared.requestMovieTrailers(targetMovie: movieDataToDisplay.id)
                 detailsViewController.detailsViewModel.backgroundImageViewURL = movieDataToDisplay.posterPath
                 detailsViewController.detailsViewModel.detailsTitle = movieDataToDisplay.title
                 detailsViewController.detailsViewModel.detailsPosterURL = movieDataToDisplay.posterPath
@@ -125,14 +119,12 @@ extension WatchLaterViewController: UICollectionViewDelegate {
                 detailsViewController.detailsViewModel.movieOrTvShow = 0
             }
         } else if watchLaterSegmentedControl.selectedSegmentIndex == 1 {
-            tvDataToDisplay = watchLaterViewModel.savedSeriesData[indexPath.row]
-            let main = UIStoryboard(name: WatchLaterConstants.storyboardName, bundle: nil)
+            let tvDataToDisplay = watchLaterViewModel.savedSeriesData[indexPath.row]
+            let main = UIStoryboard(name: storyboardName, bundle: nil)
             if let detailsViewController = main.instantiateViewController(withIdentifier:
-                                                                            WatchLaterConstants.viewControllerName)
+                                                                            detailsViewControllerName)
                 as? DetailsViewController {
                 navigationController?.pushViewController(detailsViewController, animated: true)
-                RequestManager.shared.requestTvCast(targetShowId: tvDataToDisplay.id)
-                RequestManager.shared.requestTvTrailers(targetShow: tvDataToDisplay.id)
                 detailsViewController.detailsViewModel.backgroundImageViewURL = tvDataToDisplay.posterPath
                 detailsViewController.detailsViewModel.detailsTitle = tvDataToDisplay.name
                 detailsViewController.detailsViewModel.detailsPosterURL = tvDataToDisplay.posterPath
@@ -144,5 +136,22 @@ extension WatchLaterViewController: UICollectionViewDelegate {
                 detailsViewController.detailsViewModel.movieOrTvShow = 1
             }
         }
+    }
+}
+
+extension WatchLaterViewController: WatchLaterDeleteDelegate {
+    
+    func removeMovie(targetMovie: Int, indexForRemove: Int) {
+        
+        watchLaterViewModel.removeMovieFromWatchLater(targetMovie: targetMovie,
+                                                          indexForRemove: indexForRemove)
+        watchLaterCollectionView.reloadData()
+    }
+    
+    func removeTvShow(targetTvShow: Int, indexForRemove: Int) {
+        
+        watchLaterViewModel.removeTvShowFromWatchLater(targetTvShow: targetTvShow,
+                                                       indexForRemove: indexForRemove)
+        watchLaterCollectionView.reloadData()
     }
 }

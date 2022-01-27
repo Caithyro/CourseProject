@@ -8,18 +8,13 @@
 import UIKit
 import SDWebImage
 import Lottie
-import SwiftUI
 
 class TrendingCollectionViewCell: UICollectionViewCell {
     
-    static let shared = TrendingCollectionViewCell()
-    let languagesDictionary = DetailsViewController.shared.detailsViewModel.originalLanguages
-    weak var trendingViewControllerInstance = TrendingViewController()
-    
+    var trendingViewModel = TrendingViewControllerViewModel()
     var moviesData = MoviesResultsToSave()
     var seriesData = TvResultsToSave()
-    var searchPerformed: Bool = false
-    var movieOrTvShow: Int = 0
+    var mediaType = 0
     
     private var saveAnimationView: AnimationView?
     private let transformer = SDImageResizingTransformer(size: CGSize(width: 170, height: 255), scaleMode: .fill)
@@ -39,27 +34,42 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     
     @IBAction func saveToWatchLaterButtonPressed(_ sender: Any) {
         
-        runSaveAnimation()
-        if TrendingCollectionViewCell.shared.movieOrTvShow == 0 {
-            saveMovieToWatchLater()
+        saveAnimationView = .init(name: "heartAnimation")
+        trendingViewModel.setupSaveAnimation(animationView: saveAnimationView, button: saveButton)
+        saveAnimationView?.play(completion: removeSaveAnimationView(animationCompleted:))
+        
+        if self.mediaType == 0 {
+            do {
+                trendingViewModel.saveMovieToWatchLater(dataToSave: self.moviesData)
+                trendingViewModel.displaySaveStatusAlert(saveSuccess: true)
+            } catch {
+                trendingViewModel.displaySaveStatusAlert(saveSuccess: false)
+            }
         } else {
-            saveTvShowToWatchLater()
+            do {
+                trendingViewModel.savaTvShowToWatchLater(dataToSave: self.seriesData)
+                trendingViewModel.displaySaveStatusAlert(saveSuccess: true)
+            } catch {
+                trendingViewModel.displaySaveStatusAlert(saveSuccess: false)
+            }
         }
     }
     
     
     func configureMoviesCell(dataToDisplay: MoviesResults) {
         
+        let posterUrlString = "\(imageUrlString)\(dataToDisplay.posterPath ?? "")"
         self.titleLabel.text = dataToDisplay.title
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath ?? "")"),
+        self.posterImageView.sd_setImage(with: URL(string: posterUrlString),
                                          placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
-        self.ratingLabel.text = "\(TrendingConstants.averageRatingString) \(dataToDisplay.voteAverage ?? 0.0)"
-        self.releaseDateLabel.text = "\(TrendingConstants.releaseDateString) \(dataToDisplay.releaseDate ?? "")"
+        self.ratingLabel.text = "\(averageRatingString) \(dataToDisplay.voteAverage ?? 0.0)"
+        self.releaseDateLabel.text = "\(releaseDateString) \(dataToDisplay.releaseDate ?? "")"
         self.originalLanguageLabel.text =
-        "\(TrendingConstants.originalLanguageString) \(languagesDictionary[dataToDisplay.originalLanguage ?? ""] ?? "nil")"
-        self.totalVotesLabel.text = "\(TrendingConstants.totalVotesString) \(dataToDisplay.voteCount ?? 0)"
-        self.mainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
+        "\(originalLanguageString) \(originalLanguages[dataToDisplay.originalLanguage ?? ""] ?? "nil")"
+        self.totalVotesLabel.text = "\(totalVotesString) \(dataToDisplay.voteCount ?? 0)"
+        self.mainView.layer.backgroundColor = transparentBackgroundColor
+        self.mediaType = 0
         self.moviesData.id = dataToDisplay.id ?? 0
         self.moviesData.releaseDate = dataToDisplay.releaseDate ?? ""
         self.moviesData.adult = dataToDisplay.adult ?? false
@@ -78,16 +88,18 @@ class TrendingCollectionViewCell: UICollectionViewCell {
     
     func configureSeriesCell(dataToDisplay: TvResults) {
         
+        let posterUrlString = "\(imageUrlString)\(dataToDisplay.posterPath ?? "")"
         self.titleLabel.text = dataToDisplay.name
         self.posterImageView.layer.cornerRadius = 15
-        self.posterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/w1280\(dataToDisplay.posterPath ?? "")"),
+        self.posterImageView.sd_setImage(with: URL(string: posterUrlString),
                                          placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
-        self.ratingLabel.text = "\(TrendingConstants.averageRatingString) \(dataToDisplay.voteAverage ?? 0.0)"
-        self.releaseDateLabel.text = "\(TrendingConstants.firstAirString) \(dataToDisplay.firstAirDate ?? "")"
+        self.ratingLabel.text = "\(averageRatingString) \(dataToDisplay.voteAverage ?? 0.0)"
+        self.releaseDateLabel.text = "\(firstAirString) \(dataToDisplay.firstAirDate ?? "")"
         self.originalLanguageLabel.text =
-        "\(TrendingConstants.originalLanguageString) \(languagesDictionary[dataToDisplay.originalLanguage ?? ""] ?? "nil")"
-        self.totalVotesLabel.text = "\(TrendingConstants.totalVotesString) \(dataToDisplay.voteCount ?? 0)"
-        self.mainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
+        "\(originalLanguageString) \(originalLanguages[dataToDisplay.originalLanguage ?? ""] ?? "nil")"
+        self.totalVotesLabel.text = "\(totalVotesString) \(dataToDisplay.voteCount ?? 0)"
+        self.mainView.layer.backgroundColor = transparentBackgroundColor
+        self.mediaType = 1
         self.seriesData.id = dataToDisplay.id ?? 0
         self.seriesData.firstAirDate = dataToDisplay.firstAirDate ?? ""
         self.seriesData.backdropPath = dataToDisplay.backdropPath ?? ""
@@ -109,52 +121,5 @@ class TrendingCollectionViewCell: UICollectionViewCell {
         if animationCompleted == true {
             saveAnimationView?.removeFromSuperview()
         }
-    }
-    
-    private func runSaveAnimation() {
-        
-        saveAnimationView = .init(name: "heartAnimation")
-        if saveAnimationView != nil {
-            saveAnimationView!.frame = saveButton.bounds
-            saveAnimationView!.contentMode = .scaleAspectFit
-            saveAnimationView!.loopMode = .playOnce
-            saveAnimationView!.animationSpeed = 2
-            saveButton.addSubview(saveAnimationView!)
-            saveAnimationView!.play(completion: removeSaveAnimationView(animationCompleted:))
-        }
-    }
-    
-    private func saveMovieToWatchLater() {
-        
-        DataManager.shared.saveMoviesToWatchLater(id: self.moviesData.id,
-                                                  releaseDate: self.moviesData.releaseDate,
-                                                  adult: self.moviesData.adult,
-                                                  backdropPath: self.moviesData.backdropPath,
-                                                  voteCount: self.moviesData.voteCount,
-                                                  overview: self.moviesData.overview,
-                                                  originalLanguage: self.moviesData.originalLanguage,
-                                                  originalTitle: self.moviesData.originalTitle,
-                                                  posterPath: self.moviesData.posterPath,
-                                                  title: self.moviesData.title,
-                                                  video: self.moviesData.video,
-                                                  voteAverage: self.moviesData.voteAverage,
-                                                  popularity: self.moviesData.popularity,
-                                                  mediaType: self.moviesData.mediaType)
-    }
-    
-    private func saveTvShowToWatchLater() {
-        
-        DataManager.shared.saveTvShowsToWatchLater(originalLanguage: self.seriesData.originalLanguage,
-                                                   posterPath: self.seriesData.posterPath,
-                                                   voteCount: self.seriesData.voteCount,
-                                                   voteAverage: self.seriesData.voteAverage,
-                                                   overview: self.seriesData.overview,
-                                                   id: self.seriesData.id,
-                                                   originalName: self.seriesData.originalName,
-                                                   firstAirDate: self.seriesData.firstAirDate,
-                                                   name: self.seriesData.name,
-                                                   backdropPath: self.seriesData.backdropPath,
-                                                   popularity: self.seriesData.popularity,
-                                                   mediaType: self.seriesData.mediaType)
     }
 }

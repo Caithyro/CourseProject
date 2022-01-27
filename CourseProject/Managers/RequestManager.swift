@@ -12,22 +12,21 @@ import RealmSwift
 class RequestManager {
     
     static let shared = RequestManager()
-    weak var trendingViewControllerInstance = TrendingViewController()
-    weak var detailsViewControllerInstance = DetailsViewController()
+    private let dataManager = DataManager.shared
     
-    var moviesResponceData: [MoviesResults] = []
-    var tvShowsResponceData: [TvResults] = []
-    var movieCastResponceData: [MovieCastResults] = []
-    var tvCastResponceData: [TvCastResults] = []
-    var movieTrailersResponceData: [MovieTrailersRelults] = []
-    var tvTrailersResponceData: [TvTrailersRelults] = []
+    private var moviesResponceData: [MoviesResults] = []
+    private var tvShowsResponceData: [TvResults] = []
+    private var movieCastResponceData: [MovieCastResults] = []
+    private var tvCastResponceData: [TvCastResults] = []
+    private var movieTrailersResponceData: [MovieTrailersRelults] = []
+    private var tvTrailersResponceData: [TvTrailersRelults] = []
     
-    func requestMovies() {
+    func requestMovies(completion: @escaping(([MoviesResults]) -> ())) {
         
         let movieRequestUrlString =
         "https://api.themoviedb.org/3/trending/movie/day?api_key=0b7fec5fcf33f299afcdde35a5fa4843"
         
-        AF.request(movieRequestUrlString).response { [self]moviesResponceData1 in
+        AF.request(movieRequestUrlString).response { [self] moviesResponceData1 in
             
             do {
                 
@@ -39,13 +38,14 @@ class RequestManager {
                     self.moviesResponceData.append(moviesResponseModel.results![indexForAppend])
                     indexForAppend += 1
                 }
+                completion(moviesResponceData)
                 
                 indexForAppend = 0
                 
-                DataManager.shared.clearTrendingMoviesRealmData()
+                dataManager.clearTrendingMoviesRealmData()
                 
                 for _ in self.moviesResponceData {
-                    DataManager.shared.saveMoviesToRealm(id: self.moviesResponceData[indexForAppend].id ?? 0,
+                    dataManager.saveMoviesToRealm(id: self.moviesResponceData[indexForAppend].id ?? 0,
                                                          releaseDate: self.moviesResponceData[indexForAppend].releaseDate ?? "",
                                                          adult: self.moviesResponceData[indexForAppend].adult ?? false,
                                                          backdropPath: self.moviesResponceData[indexForAppend].backdropPath ?? "",
@@ -62,19 +62,18 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                self.trendingViewControllerInstance?.trendingCollectionView.reloadData()
             } catch {
                 print(error)
             }
         }
     }
     
-    func requestTvShows() {
+    func requestTvShows(completion: @escaping(([TvResults]) -> ())) {
         
         let tvRequestUrlString =
         "https://api.themoviedb.org/3/trending/tv/day?api_key=0b7fec5fcf33f299afcdde35a5fa4843"
         
-        AF.request(tvRequestUrlString).response { tvResponceData1 in
+        AF.request(tvRequestUrlString).response { [self] tvResponceData1 in
             
             do {
                 
@@ -86,13 +85,14 @@ class RequestManager {
                     self.tvShowsResponceData.append(tvResponseModel.results![indexForAppend])
                     indexForAppend += 1
                 }
+                completion(tvShowsResponceData)
                 
                 indexForAppend = 0
                 
-                DataManager.shared.clearTrendingSeriesRealmData()
+                dataManager.clearTrendingSeriesRealmData()
                 
                 for _ in self.tvShowsResponceData {
-                    DataManager.shared.saveTvShowsToRealm(originalLanguage: self.tvShowsResponceData[indexForAppend].originalLanguage ?? "",
+                    self.dataManager.saveTvShowsToRealm(originalLanguage: self.tvShowsResponceData[indexForAppend].originalLanguage ?? "",
                                                           posterPath: self.tvShowsResponceData[indexForAppend].posterPath ?? "",
                                                           voteCount: self.tvShowsResponceData[indexForAppend].voteCount ?? 0,
                                                           voteAverage: self.tvShowsResponceData[indexForAppend].voteAverage ?? 0.0,
@@ -107,14 +107,13 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                self.trendingViewControllerInstance?.trendingCollectionView.reloadData()
             } catch {
                 print(error)
             }
         }
     }
     
-    func requestMovieCast(targetMovieId: Int) {
+    func requestMovieCast(targetMovieId: Int, completion: @escaping(([MovieCastResultsToSave]) -> ())) {
         
         let movieCastRequestUrlString =
         "https://api.themoviedb.org/3/movie/\(targetMovieId)/credits?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US"
@@ -134,10 +133,10 @@ class RequestManager {
                 
                 indexForAppend = 0
                 
-                DataManager.shared.clearMovieCastRealmData()
+                dataManager.clearMovieCastRealmData()
                 
                 for _ in self.movieCastResponceData {
-                    DataManager.shared.saveMovieCastToRealm(adult: self.movieCastResponceData[indexForAppend].adult ?? false,
+                    dataManager.saveMovieCastToRealm(adult: self.movieCastResponceData[indexForAppend].adult ?? false,
                                                             gender: self.movieCastResponceData[indexForAppend].gender ?? 0,
                                                             id: self.movieCastResponceData[indexForAppend].id ?? 0,
                                                             knownForDepartment: self.movieCastResponceData[indexForAppend].knownForDepartment ?? "",
@@ -152,15 +151,16 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                detailsViewControllerInstance?.detailsViewModel.savedMovieCast = DataManager.shared.getMovieCastFromRealm()
-                detailsViewControllerInstance?.detailsCastCollectionView.reloadData()
+                var movieCastArray: [MovieCastResultsToSave] = []
+                movieCastArray = dataManager.getMovieCastFromRealm()
+                completion(movieCastArray)
             } catch {
                 print(error)
             }
         }
     }
     
-    func requestTvCast(targetShowId: Int) {
+    func requestTvCast(targetShowId: Int, completion: @escaping(([TvCastResultsToSave]) -> ())) {
         
         let tvCastRequestUrlString =
         "https://api.themoviedb.org/3/tv/\(targetShowId)/credits?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US"
@@ -180,10 +180,10 @@ class RequestManager {
                 
                 indexForAppend = 0
                 
-                DataManager.shared.clearTvCastRealmData()
+                dataManager.clearTvCastRealmData()
                 
                 for _ in self.tvCastResponceData {
-                    DataManager.shared.saveTvCastToRealm(adult: self.tvCastResponceData[indexForAppend].adult ?? false,
+                    dataManager.saveTvCastToRealm(adult: self.tvCastResponceData[indexForAppend].adult ?? false,
                                                          gender: self.tvCastResponceData[indexForAppend].gender ?? 0,
                                                          id: self.tvCastResponceData[indexForAppend].id ?? 0,
                                                          knownForDepartment: self.tvCastResponceData[indexForAppend].knownForDepartment ?? "",
@@ -197,20 +197,21 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                detailsViewControllerInstance?.detailsViewModel.savedTvCast = DataManager.shared.getTvCastFromRealm()
-                detailsViewControllerInstance?.detailsCastCollectionView.reloadData()
+                var tvCastArray: [TvCastResultsToSave] = []
+                tvCastArray = dataManager.getTvCastFromRealm()
+                completion(tvCastArray)
             } catch {
                 print(error)
             }
         }
     }
     
-    func requestMovieTrailers(targetMovie: Int) {
+    func requestMovieTrailers(targetMovie: Int, completion: @escaping((String) -> ())) {
         
         let movieTrailersRequestUrlString =
         "https://api.themoviedb.org/3/movie/\(targetMovie)/videos?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US"
         
-        AF.request(movieTrailersRequestUrlString).response { [self]movieTrailersResponceData1 in
+        AF.request(movieTrailersRequestUrlString).response { [self] movieTrailersResponceData1 in
             
             do {
                 
@@ -225,10 +226,10 @@ class RequestManager {
                 
                 indexForAppend = 0
                 
-                DataManager.shared.clearMovieTrailersRealmData()
+                dataManager.clearMovieTrailersRealmData()
                 
                 for _ in self.movieTrailersResponceData {
-                    DataManager.shared.saveMovieTrailersToRealm(iso6391: self.movieTrailersResponceData[indexForAppend].iso6391 ?? "",
+                    dataManager.saveMovieTrailersToRealm(iso6391: self.movieTrailersResponceData[indexForAppend].iso6391 ?? "",
                                                                 iso31661: self.movieTrailersResponceData[indexForAppend].iso31661 ?? "",
                                                                 name: self.movieTrailersResponceData[indexForAppend].name ?? "",
                                                                 key: self.movieTrailersResponceData[indexForAppend].key ?? "",
@@ -241,20 +242,21 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                detailsViewControllerInstance?.detailsViewModel.savedMovieTrailers = DataManager.shared.getMovieTrailersFromRealm()
-                detailsViewControllerInstance?.detailsPlayerView.load(withVideoId: detailsViewControllerInstance?.detailsViewModel.savedMovieTrailers.first?.key ?? "")
+                var movieTrailersArray: [MovieTrailersRelultsToSave] = []
+                movieTrailersArray = dataManager.getMovieTrailersFromRealm()
+                completion(movieTrailersArray.first?.key ?? "")
             } catch {
                 print(error)
             }
         }
     }
     
-    func requestTvTrailers(targetShow: Int) {
+    func requestTvTrailers(targetShow: Int, completion: @escaping((String) -> ())) {
         
         let tvTrailersRequestUrlString =
         "https://api.themoviedb.org/3/tv/\(targetShow)/videos?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US"
         
-        AF.request(tvTrailersRequestUrlString).response { [self]tvTrailersResponceData1 in
+        AF.request(tvTrailersRequestUrlString).response { [self] tvTrailersResponceData1 in
             
             do {
                 
@@ -269,10 +271,10 @@ class RequestManager {
                 
                 indexForAppend = 0
                 
-                DataManager.shared.clearTvTrailersRealmData()
+                dataManager.clearTvTrailersRealmData()
                 
                 for _ in self.tvTrailersResponceData {
-                    DataManager.shared.saveTvTrailersToRealm(iso6391: self.tvTrailersResponceData[indexForAppend].iso6391 ?? "",
+                    dataManager.saveTvTrailersToRealm(iso6391: self.tvTrailersResponceData[indexForAppend].iso6391 ?? "",
                                                              iso31661: self.tvTrailersResponceData[indexForAppend].iso31661 ?? "",
                                                              name: self.tvTrailersResponceData[indexForAppend].name ?? "",
                                                              key: self.tvTrailersResponceData[indexForAppend].key ?? "",
@@ -285,22 +287,23 @@ class RequestManager {
                     indexForAppend += 1
                 }
                 indexForAppend = 0
-                detailsViewControllerInstance?.detailsViewModel.savedTvTrailers = DataManager.shared.getTvTrailersFromRealm()
-                detailsViewControllerInstance?.detailsPlayerView.load(withVideoId: detailsViewControllerInstance?.detailsViewModel.savedTvTrailers.first?.key ?? "")
+                var tvShowTrailersArray: [TvTrailersRelultsToSave] = []
+                tvShowTrailersArray = dataManager.getTvTrailersFromRealm()
+                completion(tvShowTrailersArray.first?.key ?? "")
             } catch {
                 print(error)
             }
         }
     }
     
-    func movieSearchRequest(query: String) {
+    func movieSearchRequest(query: String, completion: @escaping(([MoviesResults]) -> ())) {
         
         let emptyData = Data.init()
         let rightQuery = query.replacingOccurrences(of: " ", with: "%20")
         let movieSearchRequestUrlString =
         "https://api.themoviedb.org/3/search/movie?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US&query=\(rightQuery)&page=1&include_adult=false"
         
-        AF.request(movieSearchRequestUrlString).response { [self]movieSearchResponceData1 in
+        AF.request(movieSearchRequestUrlString).response { [self] movieSearchResponceData1 in
             
             do {
                 self.moviesResponceData.removeAll()
@@ -312,22 +315,22 @@ class RequestManager {
                     self.moviesResponceData.append(movieSearchResponseModel.results![indexForAppend])
                     indexForAppend += 1
                 }
+                completion(moviesResponceData)
                 indexForAppend = 0
             } catch {
                 print(error)
             }
-            trendingViewControllerInstance?.trendingCollectionView.reloadData()
         }
     }
     
-    func tvSearchRequest(query: String) {
+    func tvSearchRequest(query: String, completion: @escaping(([TvResults]) -> ())) {
         
         let emptyData = Data.init()
         let rightQuery = query.replacingOccurrences(of: " ", with: "%20")
         let tvSearchRequestUrlString =
         "https://api.themoviedb.org/3/search/tv?api_key=0b7fec5fcf33f299afcdde35a5fa4843&language=en-US&page=1&query=\(rightQuery)&include_adult=false"
         
-        AF.request(tvSearchRequestUrlString).response { [self]tvSearchResponceData1 in
+        AF.request(tvSearchRequestUrlString).response { [self] tvSearchResponceData1 in
             
             do {
                 
@@ -340,11 +343,11 @@ class RequestManager {
                     self.tvShowsResponceData.append(tvSearchResponseModel.results![indexForAppend])
                     indexForAppend += 1
                 }
+                completion(tvShowsResponceData)
                 indexForAppend = 0
             } catch {
                 print(error)
             }
-            trendingViewControllerInstance?.trendingCollectionView.reloadData()
         }
     }
 }

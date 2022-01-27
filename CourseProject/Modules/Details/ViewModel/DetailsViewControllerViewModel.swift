@@ -9,10 +9,7 @@ import Foundation
 
 class DetailsViewControllerViewModel {
     
-    static let shared = DetailsViewControllerViewModel()
-    let originalLanguages: [String: String] = ["en" : "English", "es" : "Spanish", "ru" : "Russian",
-                                               "ko": "Korean", "it" : "Italian", "ja" : "Japanese",
-                                               "fr" : "French", "ml" : "Malayalam", "pl" : "Polish", "id" : "Indonesian", "nil" : "Unknown"]
+    let requestManager = RequestManager.shared
     
     var savedMovieCast: [MovieCastResultsToSave] = []
     var savedTvCast: [TvCastResultsToSave] = []
@@ -34,27 +31,40 @@ class DetailsViewControllerViewModel {
         
         if movieOrTvShow == 0 {
             loadMovieCastAndTrailers(targetMovie: targetMovie, completion: {
-                self.videoId = self.savedMovieTrailers.first?.key ?? ""
+                completion()
             })
         } else {
-            loadTvShowCastAndTrailers(targetTvShow: targetTvShow)
+            loadTvShowCastAndTrailers(targetTvShow: targetTvShow, completion: {
+                completion ()
+            })
         }
-        completion()
     }
     
     //MARK: - Private
     
-    private func loadMovieCastAndTrailers(targetMovie: Int, completion: @escaping (() -> ())) {
+    private func loadMovieCastAndTrailers(targetMovie: Int, completion: @escaping(() -> ())) {
         
-        RequestManager.shared.requestMovieCast(targetMovieId: targetMovie)
-        RequestManager.shared.requestMovieTrailers(targetMovie: targetMovie)
-        completion()
+        requestManager.requestMovieTrailers(targetMovie: targetMovie,
+                                            completion: { movieTrailerKey in
+            self.videoId = movieTrailerKey
+        })
+        requestManager.requestMovieCast(targetMovieId: targetMovie,
+                                        completion: { movieCast in
+            self.savedMovieCast = movieCast
+            completion()
+        })
     }
     
-    private func loadTvShowCastAndTrailers(targetTvShow: Int) {
+    private func loadTvShowCastAndTrailers(targetTvShow: Int, completion: @escaping(() -> ())) {
         
-        RequestManager.shared.requestTvCast(targetShowId: targetTvShow)
-        RequestManager.shared.requestTvTrailers(targetShow: targetTvShow)
-        videoId = savedTvTrailers.first?.key ?? ""
+        requestManager.requestTvTrailers(targetShow: targetTvShow,
+                                         completion: { tvShowTrailerKey in
+            self.videoId = tvShowTrailerKey
+        })
+        requestManager.requestTvCast(targetShowId: targetTvShow,
+                                     completion: {tvCast in
+            self.savedTvCast = tvCast
+            completion()
+        })
     }
 }

@@ -7,12 +7,10 @@
 
 import UIKit
 import SDWebImage
-import RealmSwift
 import youtube_ios_player_helper
 
 class DetailsViewController: UIViewController {
     
-    static let shared = DetailsViewController()
     var detailsViewModel = DetailsViewControllerViewModel()
     
     let transformerForBackground = SDImageResizingTransformer(size: CGSize(width: 414, height: 896), scaleMode: .fill)
@@ -33,13 +31,16 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        RequestManager.shared.detailsViewControllerInstance = self
-        
-        detailsCastCollectionView!.register(UINib(nibName: DetailsConstants.cellName, bundle: nil),
-                                            forCellWithReuseIdentifier: DetailsConstants.cellName)
+        detailsCastCollectionView!.register(UINib(nibName: detailsCellName, bundle: nil),
+                                            forCellWithReuseIdentifier: detailsCellName)
         setBackgroundImage()
         setPosterImage()
         setLabelsTexts()
+        detailsViewModel.loadTrailersAndCast(movieOrTvShow: self.detailsViewModel.movieOrTvShow,
+                                             targetMovie: self.detailsViewModel.targetMovie, targetTvShow: self.detailsViewModel.targetTvShow, completion: {
+            self.detailsCastCollectionView.reloadData()
+            self.detailsPlayerView.load(withVideoId: self.detailsViewModel.videoId)
+        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,11 +48,6 @@ class DetailsViewController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
         self.tabBarController?.tabBar.layer.isHidden = true
-        detailsViewModel.loadTrailersAndCast(movieOrTvShow: self.detailsViewModel.movieOrTvShow,
-                                             targetMovie: self.detailsViewModel.targetMovie, targetTvShow: self.detailsViewModel.targetTvShow, completion: {
-            self.detailsCastCollectionView.reloadData()
-            self.detailsPlayerView.load(withVideoId: self.detailsViewModel.videoId)
-        })
     }
     
     //MARK: - Private
@@ -67,28 +63,29 @@ class DetailsViewController: UIViewController {
     
     private func setBackgroundImage() {
         
-        self.detailsScrollView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
-        self.detailsMainView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
-        self.detailsBackgroundImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(detailsViewModel.backgroundImageViewURL)"),
+        let backgroundImageUrlString = "\(imageUrlString)\(detailsViewModel.backgroundImageViewURL)"
+        self.detailsScrollView.layer.backgroundColor = transparentBackgroundColor
+        self.detailsMainView.layer.backgroundColor = transparentBackgroundColor
+        self.detailsBackgroundImageView.sd_setImage(with: URL(string: backgroundImageUrlString),
                                                     placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformerForBackground])
         applyBlur(imageView: detailsBackgroundImageView)
     }
     
     private func setPosterImage() {
         
+        let posterImageUrlString = "\(imageUrlString)\(detailsViewModel.detailsPosterURL)"
         self.detailsPosterImageView.layer.cornerRadius = 25
-        self.detailsPosterImageView.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(detailsViewModel.detailsPosterURL)"),
+        self.detailsPosterImageView.sd_setImage(with: URL(string: posterImageUrlString),
                                                 placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformerForPoster])
     }
     
     private func setLabelsTexts() {
         
-        let languagesDictionary = detailsViewModel.originalLanguages
         self.detailsTitleLabel.text = detailsViewModel.detailsTitle
         self.detailsDescriptionLabel.text = detailsViewModel.detailsDescription
-        self.detailsAverageVoteLabel.text = "\(DetailsConstants.averageRateString) \(detailsViewModel.detailsAverageVote) \(DetailsConstants.inString) \(detailsViewModel.detailsVoteCount) \(DetailsConstants.votesString)"
-        self.detailsLanguageLabel.text = "\(DetailsConstants.originalLanguageString) \(languagesDictionary[detailsViewModel.detailsOriginalLanguage] ?? "\(DetailsConstants.unknownString)")"
-        self.detailsCastCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0, yellow: 0, black: 0, alpha: 0)
+        self.detailsAverageVoteLabel.text = "\(detailsAverageRateString) \(detailsViewModel.detailsAverageVote) \(detailsInString) \(detailsViewModel.detailsVoteCount) \(detailsVotesString)"
+        self.detailsLanguageLabel.text = "\(originalLanguageString) \(originalLanguages[detailsViewModel.detailsOriginalLanguage] ?? "\(detailsUnknownString)")"
+        self.detailsCastCollectionView.layer.backgroundColor = transparentBackgroundColor
     }
 }
 
@@ -107,7 +104,7 @@ extension DetailsViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let detailsCell = detailsCastCollectionView.dequeueReusableCell(withReuseIdentifier: DetailsConstants.cellName,
+        guard let detailsCell = detailsCastCollectionView.dequeueReusableCell(withReuseIdentifier: detailsCellName,
                                                                               for: indexPath) as? DetailsCollectionViewCell else { return UICollectionViewCell() }
         if detailsViewModel.movieOrTvShow == 0 {
             var dataToDisplay = MovieCastResultsToSave()

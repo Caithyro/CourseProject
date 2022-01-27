@@ -6,30 +6,19 @@
 //
 
 import UIKit
-import StatusAlert
 
 class TrendingViewController: UIViewController {
-    
-    static let shared = TrendingViewController()
     
     @IBOutlet weak var trendingCollectionView: UICollectionView!
     @IBOutlet weak var trendingSegmentedControl: UISegmentedControl!
     @IBOutlet weak var trendingSearchBar: UISearchBar!
     
     var trendingViewModel = TrendingViewControllerViewModel()
-    var searchPerformed: Bool = false
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         
-        RequestManager.shared.trendingViewControllerInstance = self
-        WatchLaterViewController.shared.trendingViewControllerInstance = self
-        TrendingCollectionViewCell.shared.trendingViewControllerInstance = self
-        DataManager.shared.trendingViewControllerInstance = self
-        
         doStartupSetup()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,38 +28,20 @@ class TrendingViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = false
     }
     
-    func displaySaveStatusAlert(saveSuccess: Bool) {
-        
-        let statusAlert = StatusAlert()
-        statusAlert.appearance.backgroundColor = UIColor.systemGray2
-        statusAlert.appearance.blurStyle = .regular
-        statusAlert.alertShowingDuration = TrendingConstants.alertShowingDuration
-        statusAlert.canBePickedOrDismissed = true
-        if saveSuccess == true {
-            statusAlert.image = UIImage(systemName: "heart.fill")
-            statusAlert.title = TrendingConstants.saveSuccessString
-            statusAlert.message = ""
-            statusAlert.showInKeyWindow()
-        } else {
-            statusAlert.image = UIImage(systemName: "heart.slash.fill")
-            statusAlert.title = TrendingConstants.saveFailString
-            statusAlert.message = ""
-            statusAlert.showInKeyWindow()
-        }
-    }
-    
     @IBAction func trendingSegmentedControlSwitched(_ sender: Any) {
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            trendingViewModel.loadMovies(searchPerformed: self.searchPerformed,
-                                         query: self.trendingSearchBar.text ?? "")
-            DetailsViewController.shared.detailsViewModel.movieOrTvShow = 0
-            TrendingCollectionViewCell.shared.movieOrTvShow = 0
+            trendingViewModel.loadMovies(searchPerformed: trendingViewModel.searchPerformed,
+                                         query: self.trendingSearchBar.text ?? "", completion: {
+                self.trendingCollectionView.reloadData()
+            })
+            trendingViewModel.movieOrTvShow = 0
         } else {
-            trendingViewModel.loadTvShows(searchPerformed: self.searchPerformed,
-                                          query: self.trendingSearchBar.text ?? "")
-            DetailsViewController.shared.detailsViewModel.movieOrTvShow = 1
-            TrendingCollectionViewCell.shared.movieOrTvShow = 1
+            trendingViewModel.loadTvShows(searchPerformed: trendingViewModel.searchPerformed,
+                                          query: self.trendingSearchBar.text ?? "", completion: {
+                self.trendingCollectionView.reloadData()
+            })
+            trendingViewModel.movieOrTvShow = 1
         }
     }
     
@@ -78,16 +49,22 @@ class TrendingViewController: UIViewController {
     
     private func doStartupSetup() {
         
-        self.trendingCollectionView.layer.backgroundColor = CGColor(genericCMYKCyan: 0, magenta: 0,
-                                                                    yellow: 0, black: 0, alpha: 0)
-        self.trendingCollectionView.register(UINib(nibName: TrendingConstants.cellName,
-                                                   bundle: nil), forCellWithReuseIdentifier: TrendingConstants.cellName)
+        self.trendingCollectionView.layer.backgroundColor = transparentBackgroundColor
+        self.trendingCollectionView.register(UINib(nibName: trendingCellName,
+                                                   bundle: nil), forCellWithReuseIdentifier: trendingCellName)
+        trendingViewModel.loadMovies(searchPerformed: trendingViewModel.searchPerformed,
+                                     query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingCollectionView.reloadData()
+        })
+        trendingViewModel.loadTvShows(searchPerformed: trendingViewModel.searchPerformed,
+                                      query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingCollectionView.reloadData()
+        })
         trendingSegmentedControl.selectedSegmentIndex = 0
-        TrendingCollectionViewCell.shared.movieOrTvShow = 0
+        trendingViewModel.movieOrTvShow = 0
         trendingSearchBar.showsCancelButton = false
-        self.title = TrendingConstants.titleString
-        trendingViewModel.loadMovies(searchPerformed: self.searchPerformed, query: "")
-        trendingViewModel.loadTvShows(searchPerformed: self.searchPerformed, query: "")
+        self.title = trendingTitleString
+        
     }
 }
 
@@ -98,9 +75,9 @@ extension TrendingViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            return RequestManager.shared.moviesResponceData.count
+            return trendingViewModel.moviesResponceData.count
         } else {
-            return RequestManager.shared.tvShowsResponceData.count
+            return trendingViewModel.tvShowsResponceData.count
         }
     }
     
@@ -108,10 +85,10 @@ extension TrendingViewController: UICollectionViewDataSource {
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
             
-            guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: TrendingConstants.cellName,
+            guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: trendingCellName,
                                                                                 for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
             
-            var moviesDataToDisplay = RequestManager.shared.moviesResponceData
+            var moviesDataToDisplay = trendingViewModel.moviesResponceData
             let eachSearchedMovie = moviesDataToDisplay[indexPath.row]
             trendingCell.configureMoviesCell(dataToDisplay: eachSearchedMovie)
             for _ in moviesDataToDisplay {
@@ -119,10 +96,10 @@ extension TrendingViewController: UICollectionViewDataSource {
             }
             return trendingCell
         } else {
-            guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: TrendingConstants.cellName,
+            guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: trendingCellName,
                                                                                 for: indexPath) as? TrendingCollectionViewCell else { return UICollectionViewCell() }
             
-            var tvDataToDisplay = RequestManager.shared.tvShowsResponceData
+            var tvDataToDisplay = trendingViewModel.tvShowsResponceData
             let eachSearchedTvShow = tvDataToDisplay[indexPath.row]
             trendingCell.configureSeriesCell(dataToDisplay: eachSearchedTvShow)
             for _ in tvDataToDisplay {
@@ -138,10 +115,10 @@ extension TrendingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            let movieDataToDisplay = RequestManager.shared.moviesResponceData[indexPath.row]
-            let main = UIStoryboard(name: TrendingConstants.storyboardName, bundle: nil)
+            let movieDataToDisplay = trendingViewModel.moviesResponceData[indexPath.row]
+            let main = UIStoryboard(name: storyboardName, bundle: nil)
             if let detailsViewController = main.instantiateViewController(withIdentifier:
-                                                                            TrendingConstants.viewControllerName)
+                                                                            detailsViewControllerName)
                 as? DetailsViewController {
                 navigationController?.pushViewController(detailsViewController, animated: true)
                 detailsViewController.detailsViewModel.backgroundImageViewURL = movieDataToDisplay.backdropPath ?? ""
@@ -155,10 +132,10 @@ extension TrendingViewController: UICollectionViewDelegate {
                 detailsViewController.detailsViewModel.movieOrTvShow = 0
             }
         } else {
-            let tvDataToDisplay = RequestManager.shared.tvShowsResponceData[indexPath.row]
-            let main = UIStoryboard(name: TrendingConstants.storyboardName, bundle: nil)
+            let tvDataToDisplay = trendingViewModel.tvShowsResponceData[indexPath.row]
+            let main = UIStoryboard(name: storyboardName, bundle: nil)
             if let detailsViewController = main.instantiateViewController(withIdentifier:
-                                                                            TrendingConstants.viewControllerName)
+                                                                            detailsViewControllerName)
                 as? DetailsViewController {
                 navigationController?.pushViewController(detailsViewController, animated: true)
                 detailsViewController.detailsViewModel.backgroundImageViewURL = tvDataToDisplay.posterPath ?? ""
@@ -183,39 +160,49 @@ extension TrendingViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        searchPerformed = true
-        TrendingCollectionViewCell.shared.searchPerformed = true
+        trendingViewModel.searchPerformed = true
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
-        trendingViewModel.loadMovies(searchPerformed: self.searchPerformed,
-                                     query: self.trendingSearchBar.text ?? "")
-        trendingViewModel.loadTvShows(searchPerformed: self.searchPerformed,
-                                      query: self.trendingSearchBar.text ?? "")
+        trendingViewModel.loadMovies(searchPerformed: trendingViewModel.searchPerformed,
+                                     query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingCollectionView.reloadData()
+        })
+        trendingViewModel.loadTvShows(searchPerformed: trendingViewModel.searchPerformed,
+                                      query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingCollectionView.reloadData()
+        })
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
-        searchPerformed = false
+        trendingViewModel.searchPerformed = false
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
         searchBar.text = ""
-        TrendingCollectionViewCell.shared.searchPerformed = false
-        trendingViewModel.loadMovies(searchPerformed: self.searchPerformed,
-                                     query: self.trendingSearchBar.text ?? "")
-        trendingViewModel.loadTvShows(searchPerformed: self.searchPerformed,
-                                      query: self.trendingSearchBar.text ?? "")
+        trendingViewModel.searchPerformed = false
+        trendingViewModel.loadMovies(searchPerformed: trendingViewModel.searchPerformed,
+                                     query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingCollectionView.reloadData()
+        })
+        trendingViewModel.loadTvShows(searchPerformed: trendingViewModel.searchPerformed,
+                                      query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingCollectionView.reloadData()
+        })
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { timer in
             
-            self.searchPerformed = true
-            TrendingCollectionViewCell.shared.searchPerformed = true
-            self.trendingViewModel.loadMovies(searchPerformed: self.searchPerformed,
-                                              query: self.trendingSearchBar.text ?? "")
-            self.trendingViewModel.loadTvShows(searchPerformed: self.searchPerformed,
-                                               query: self.trendingSearchBar.text ?? "")
+            self.trendingViewModel.searchPerformed = true
+            self.trendingViewModel.loadMovies(searchPerformed: self.trendingViewModel.searchPerformed,
+                                              query: self.trendingSearchBar.text ?? "", completion: {
+                self.trendingCollectionView.reloadData()
+            })
+            self.trendingViewModel.loadTvShows(searchPerformed: self.trendingViewModel.searchPerformed,
+                                               query: self.trendingSearchBar.text ?? "", completion: {
+                self.trendingCollectionView.reloadData()
+            })
         }
     }
 }

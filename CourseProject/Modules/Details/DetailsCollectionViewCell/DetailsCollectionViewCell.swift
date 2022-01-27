@@ -22,10 +22,10 @@ class DetailsCollectionViewCell: UICollectionViewCell {
     
     func configureDetailsMovieCell(dataToDisplay: MovieCastResultsToSave) {
         
-        self.detailsCollectionViewCellMainView.layer.backgroundColor = .init(genericCMYKCyan: 0.0, magenta: 0.0,
-                                                                             yellow: 0, black: 0.0, alpha: 0)
+        let profileImageUrlString = "\(imageUrlString)\(dataToDisplay.profilePath)"
+        self.detailsCollectionViewCellMainView.layer.backgroundColor = transparentBackgroundColor
         self.detailsCollectionViewCellMainView.layer.cornerRadius = 15
-        self.detailsCollectionViewCellCastImage.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.profilePath)"),
+        self.detailsCollectionViewCellCastImage.sd_setImage(with: URL(string: profileImageUrlString),
                                                             placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.detailsCollectionViewCellCastImage.layer.cornerRadius = 15
         self.detailsCollectionViewCellCastName.text = "\(dataToDisplay.name)"
@@ -33,10 +33,10 @@ class DetailsCollectionViewCell: UICollectionViewCell {
     
     func configureDetailsSeriesCell(dataToDisplay: TvCastResultsToSave) {
         
-        self.detailsCollectionViewCellMainView.layer.backgroundColor = .init(genericCMYKCyan: 0.0, magenta: 0.0,
-                                                                             yellow: 0, black: 0.0, alpha: 0)
+        let profileImageUrlString = "\(imageUrlString)\(dataToDisplay.profilePath)"
+        self.detailsCollectionViewCellMainView.layer.backgroundColor = transparentBackgroundColor
         self.detailsCollectionViewCellMainView.layer.cornerRadius = 15
-        self.detailsCollectionViewCellCastImage.sd_setImage(with: URL(string: "https://www.themoviedb.org/t/p/original\(dataToDisplay.profilePath)"),
+        self.detailsCollectionViewCellCastImage.sd_setImage(with: URL(string: profileImageUrlString),
                                                             placeholderImage: UIImage(named: "empty"), context: [.imageTransformer: transformer])
         self.detailsCollectionViewCellCastImage.layer.cornerRadius = 15
         self.detailsCollectionViewCellCastName.text = "\(dataToDisplay.name)"
