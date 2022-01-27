@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		660FF36927A2B42500223B02 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 660FF36827A2B42500223B02 /* Podfile */; };
 		664A35F527722FA1001098FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664A35F427722FA1001098FA /* AppDelegate.swift */; };
 		664A35F727722FA1001098FA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664A35F627722FA1001098FA /* SceneDelegate.swift */; };
 		664A35F927722FA1001098FA /* TrendingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664A35F827722FA1001098FA /* TrendingViewController.swift */; };
 		664A35FC27722FA1001098FA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 664A35FA27722FA1001098FA /* Main.storyboard */; };
 		664A360127722FA3001098FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 664A35FF27722FA3001098FA /* LaunchScreen.storyboard */; };
-		664A360927723048001098FA /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 664A360827723048001098FA /* Podfile */; };
 		664A360D2772413D001098FA /* TrendingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664A360B2772413D001098FA /* TrendingCollectionViewCell.swift */; };
 		664A360E2772413D001098FA /* TrendingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 664A360C2772413D001098FA /* TrendingCollectionViewCell.xib */; };
 		664A3610277241DB001098FA /* WatchLaterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664A360F277241DB001098FA /* WatchLaterViewController.swift */; };
@@ -53,6 +53,7 @@
 /* Begin PBXFileReference section */
 		081021ADDDA201CD0E9881EA /* Pods-CourseProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CourseProject.debug.xcconfig"; path = "Target Support Files/Pods-CourseProject/Pods-CourseProject.debug.xcconfig"; sourceTree = "<group>"; };
 		12A5117487603143D74A4446 /* Pods-CourseProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CourseProject.release.xcconfig"; path = "Target Support Files/Pods-CourseProject/Pods-CourseProject.release.xcconfig"; sourceTree = "<group>"; };
+		660FF36827A2B42500223B02 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
 		664A35F127722FA1001098FA /* CourseProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CourseProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		664A35F427722FA1001098FA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		664A35F627722FA1001098FA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,7 +61,6 @@
 		664A35FB27722FA1001098FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		664A360027722FA3001098FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		664A360227722FA3001098FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		664A360827723048001098FA /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Podfile; path = CourseProject/DefaultFiles/Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		664A360B2772413D001098FA /* TrendingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingCollectionViewCell.swift; sourceTree = "<group>"; };
 		664A360C2772413D001098FA /* TrendingCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrendingCollectionViewCell.xib; sourceTree = "<group>"; };
 		664A360F277241DB001098FA /* WatchLaterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchLaterViewController.swift; sourceTree = "<group>"; };
@@ -188,7 +188,7 @@
 		66998308279D614C00E673CE /* DefaultFiles */ = {
 			isa = PBXGroup;
 			children = (
-				664A360827723048001098FA /* Podfile */,
+				660FF36827A2B42500223B02 /* Podfile */,
 				664A35F427722FA1001098FA /* AppDelegate.swift */,
 				664A35F627722FA1001098FA /* SceneDelegate.swift */,
 				6676FC032777775900CC6FC1 /* Assets.xcassets */,
@@ -405,11 +405,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				660FF36927A2B42500223B02 /* Podfile in Resources */,
 				664A360127722FA3001098FA /* LaunchScreen.storyboard in Resources */,
 				666C988427871FCD00514C42 /* deleteAnimation.json in Resources */,
 				664A360E2772413D001098FA /* TrendingCollectionViewCell.xib in Resources */,
 				664A361527724215001098FA /* WatchLaterCollectionViewCell.xib in Resources */,
-				664A360927723048001098FA /* Podfile in Resources */,
 				664A35FC27722FA1001098FA /* Main.storyboard in Resources */,
 				6676FC042777775900CC6FC1 /* Assets.xcassets in Resources */,
 				66CF1CEC2775367100FBB614 /* DetailsCollectionViewCell.xib in Resources */,
