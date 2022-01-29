@@ -19,6 +19,7 @@ class TrendingViewController: UIViewController {
         super.viewDidLoad()
         
         doStartupSetup()
+        loadMediaList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,18 +32,15 @@ class TrendingViewController: UIViewController {
     @IBAction func trendingSegmentedControlSwitched(_ sender: Any) {
         
         if trendingSegmentedControl.selectedSegmentIndex == 0 {
-            trendingViewModel.loadMovies(searchPerformed: trendingViewModel.searchPerformed,
-                                         query: self.trendingSearchBar.text ?? "", completion: {
+            trendingViewModel.loadMovies(query: self.trendingSearchBar.text ?? "", completion: {
                 self.trendingCollectionView.reloadData()
             })
-            trendingViewModel.movieOrTvShow = 0
         } else {
-            trendingViewModel.loadTvShows(searchPerformed: trendingViewModel.searchPerformed,
-                                          query: self.trendingSearchBar.text ?? "", completion: {
+            trendingViewModel.loadTvShows(query: self.trendingSearchBar.text ?? "", completion: {
                 self.trendingCollectionView.reloadData()
             })
-            trendingViewModel.movieOrTvShow = 1
         }
+        trendingViewModel.movieOrTvShow = trendingSegmentedControl.selectedSegmentIndex
     }
     
     // MARK: - Private
@@ -52,19 +50,20 @@ class TrendingViewController: UIViewController {
         self.trendingCollectionView.layer.backgroundColor = transparentBackgroundColor
         self.trendingCollectionView.register(UINib(nibName: trendingCellName,
                                                    bundle: nil), forCellWithReuseIdentifier: trendingCellName)
-        trendingViewModel.loadMovies(searchPerformed: trendingViewModel.searchPerformed,
-                                     query: self.trendingSearchBar.text ?? "", completion: {
-            self.trendingCollectionView.reloadData()
-        })
-        trendingViewModel.loadTvShows(searchPerformed: trendingViewModel.searchPerformed,
-                                      query: self.trendingSearchBar.text ?? "", completion: {
-            self.trendingCollectionView.reloadData()
-        })
         trendingSegmentedControl.selectedSegmentIndex = 0
         trendingViewModel.movieOrTvShow = 0
         trendingSearchBar.showsCancelButton = false
         self.title = trendingTitleString
         
+    }
+    
+    private func loadMediaList() {
+        trendingViewModel.loadMovies(query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingCollectionView.reloadData()
+        })
+        trendingViewModel.loadTvShows(query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingCollectionView.reloadData()
+        })
     }
 }
 
@@ -91,9 +90,7 @@ extension TrendingViewController: UICollectionViewDataSource {
             var moviesDataToDisplay = trendingViewModel.moviesResponceData
             let eachSearchedMovie = moviesDataToDisplay[indexPath.row]
             trendingCell.configureMoviesCell(dataToDisplay: eachSearchedMovie)
-            for _ in moviesDataToDisplay {
-                moviesDataToDisplay.remove(at: 0)
-            }
+            moviesDataToDisplay.removeAll()
             return trendingCell
         } else {
             guard let trendingCell = trendingCollectionView.dequeueReusableCell(withReuseIdentifier: trendingCellName,
@@ -102,9 +99,7 @@ extension TrendingViewController: UICollectionViewDataSource {
             var tvDataToDisplay = trendingViewModel.tvShowsResponceData
             let eachSearchedTvShow = tvDataToDisplay[indexPath.row]
             trendingCell.configureSeriesCell(dataToDisplay: eachSearchedTvShow)
-            for _ in tvDataToDisplay {
-                tvDataToDisplay.remove(at: 0)
-            }
+            tvDataToDisplay.removeAll()
             return trendingCell
         }
     }
@@ -163,12 +158,10 @@ extension TrendingViewController: UISearchBarDelegate {
         trendingViewModel.searchPerformed = true
         searchBar.endEditing(true)
         searchBar.showsCancelButton = false
-        trendingViewModel.loadMovies(searchPerformed: trendingViewModel.searchPerformed,
-                                     query: self.trendingSearchBar.text ?? "", completion: {
+        trendingViewModel.loadMovies(query: self.trendingSearchBar.text ?? "", completion: {
             self.trendingCollectionView.reloadData()
         })
-        trendingViewModel.loadTvShows(searchPerformed: trendingViewModel.searchPerformed,
-                                      query: self.trendingSearchBar.text ?? "", completion: {
+        trendingViewModel.loadTvShows(query: self.trendingSearchBar.text ?? "", completion: {
             self.trendingCollectionView.reloadData()
         })
     }
@@ -180,12 +173,10 @@ extension TrendingViewController: UISearchBarDelegate {
         searchBar.showsCancelButton = false
         searchBar.text = ""
         trendingViewModel.searchPerformed = false
-        trendingViewModel.loadMovies(searchPerformed: trendingViewModel.searchPerformed,
-                                     query: self.trendingSearchBar.text ?? "", completion: {
+        trendingViewModel.loadMovies(query: self.trendingSearchBar.text ?? "", completion: {
             self.trendingCollectionView.reloadData()
         })
-        trendingViewModel.loadTvShows(searchPerformed: trendingViewModel.searchPerformed,
-                                      query: self.trendingSearchBar.text ?? "", completion: {
+        trendingViewModel.loadTvShows(query: self.trendingSearchBar.text ?? "", completion: {
             self.trendingCollectionView.reloadData()
         })
     }
@@ -195,12 +186,10 @@ extension TrendingViewController: UISearchBarDelegate {
         let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { timer in
             
             self.trendingViewModel.searchPerformed = true
-            self.trendingViewModel.loadMovies(searchPerformed: self.trendingViewModel.searchPerformed,
-                                              query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingViewModel.loadMovies(query: self.trendingSearchBar.text ?? "", completion: {
                 self.trendingCollectionView.reloadData()
             })
-            self.trendingViewModel.loadTvShows(searchPerformed: self.trendingViewModel.searchPerformed,
-                                               query: self.trendingSearchBar.text ?? "", completion: {
+            self.trendingViewModel.loadTvShows(query: self.trendingSearchBar.text ?? "", completion: {
                 self.trendingCollectionView.reloadData()
             })
         }

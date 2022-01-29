@@ -20,7 +20,7 @@ class TrendingViewControllerViewModel {
     var moviesResponceData: [MoviesResults] = []
     var tvShowsResponceData: [TvResults] = []
     
-    func loadMovies(searchPerformed: Bool, query: String, completion: @escaping(() -> ())) {
+    func loadMovies(query: String, completion: @escaping(() -> ())) {
         
         if searchPerformed == false {
             requestManager.requestMovies(completion: { movies in
@@ -36,7 +36,7 @@ class TrendingViewControllerViewModel {
         }
     }
     
-    func loadTvShows(searchPerformed: Bool, query: String, completion: @escaping(() -> ())) {
+    func loadTvShows(query: String, completion: @escaping(() -> ())) {
         
         if searchPerformed == false {
             requestManager.requestTvShows(completion: { tvShows in

@@ -118,7 +118,7 @@
                                                     <constraint firstAttribute="width" secondItem="lTb-kn-WYv" secondAttribute="height" multiplier="2:3" id="VnC-zX-ztw"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YkB-CL-VEO">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YkB-CL-VEO">
                                                 <rect key="frame" x="16" y="16" width="382" height="80"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="80" id="W1M-7V-nWg"/>
