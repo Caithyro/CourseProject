@@ -53,7 +53,7 @@
 /* Begin PBXFileReference section */
 		081021ADDDA201CD0E9881EA /* Pods-CourseProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CourseProject.debug.xcconfig"; path = "Target Support Files/Pods-CourseProject/Pods-CourseProject.debug.xcconfig"; sourceTree = "<group>"; };
 		12A5117487603143D74A4446 /* Pods-CourseProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CourseProject.release.xcconfig"; path = "Target Support Files/Pods-CourseProject/Pods-CourseProject.release.xcconfig"; sourceTree = "<group>"; };
-		660FF36827A2B42500223B02 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
+		660FF36827A2B42500223B02 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		664A35F127722FA1001098FA /* CourseProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CourseProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		664A35F427722FA1001098FA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		664A35F627722FA1001098FA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };

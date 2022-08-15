@@ -1,5 +1,5 @@
 //
-//  Data&RequestManager.swift
+//  DataManager.swift
 //  CourseProject
 //
 //  Created by Дмитрий Куприенко on 22.12.2021.
